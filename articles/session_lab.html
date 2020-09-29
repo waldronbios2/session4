@@ -5,14 +5,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Session N lab exercise: What it's about • sessionN</title>
+<title>Session 4 lab exercise: Poisson log-linear regression • session4</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/lumen/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Session N lab exercise: What it's about">
-<meta property="og:description" content="sessionN">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Session 4 lab exercise: Poisson log-linear regression">
+<meta property="og:description" content="session4">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -36,7 +36,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">sessionN</a>
+        <a class="navbar-link" href="../index.html">session4</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
@@ -66,7 +66,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/waldronbios2/templatesession/">
+  <a href="https://github.com/waldronbios2/session4/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -90,11 +90,11 @@
       </header><script src="session_lab_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Session N lab exercise: What it’s about</h1>
+      <h1 data-toc-skip>Session 4 lab exercise: Poisson log-linear regression</h1>
                         <h4 class="author">Levi Waldron</h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/waldronbios2/templatesession/blob/master/vignettes/session_lab.Rmd"><code>vignettes/session_lab.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/waldronbios2/session4/blob/master/vignettes/session_lab.Rmd"><code>vignettes/session_lab.Rmd</code></a></small>
       <div class="hidden name"><code>session_lab.Rmd</code></div>
 
     </div>
@@ -107,9 +107,127 @@
 </ol>
 <p><strong>Exercises</strong></p>
 <ol style="list-style-type: decimal">
-<li>Exercise 1</li>
+<li>Example by simulation</li>
 </ol>
-</div>
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="va">simdat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>race<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"white"</span>, <span class="st">"non-white"</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">10000</span>, replace<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
+<span class="va">simdat</span><span class="op">$</span><span class="va">race</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">simdat</span><span class="op">$</span><span class="va">race</span>, levels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"white"</span>, <span class="st">"non-white"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">simdat</span><span class="op">$</span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html">rpois</a></span><span class="op">(</span><span class="fl">10000</span>, lambda<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">simdat</span><span class="op">$</span><span class="va">race</span><span class="op">==</span><span class="st">"white"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fl">3.5</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">race</span>, data<span class="op">=</span><span class="va">simdat</span>, family<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/family.html">poisson</a></span><span class="op">(</span><span class="st">"log"</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = y ~ race, family = poisson("log"), data = simdat)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -3.7537  -0.7257  -0.0402   0.6677   3.6210  
+## 
+## Coefficients:
+##                Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)    3.499100   0.002463  1420.9   &lt;2e-16 ***
+## racenon-white -0.494397   0.003993  -123.8   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for poisson family taken to be 1)
+## 
+##     Null deviance: 25873  on 9999  degrees of freedom
+## Residual deviance: 10079  on 9998  degrees of freedom
+## AIC: 60834
+## 
+## Number of Fisher Scoring iterations: 4</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Inference on deviance residuals</li>
+</ol>
+<ul>
+<li>The difference in total deviance between two nested models is <span class="math inline">\(\chi^2\)</span> distributed under <span class="math inline">\(H_0\)</span> that the more complex model is no better at explaining the response.
+<ul>
+<li>The difference in deviance residuals is (26157 - 10111) = 16046, with a difference of 1 degrees of freedom.</li>
+</ul>
+</li>
+</ul>
+<p>The critical threshold for rejection at p=0.05 is:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/stats/Chisquare.html">qchisq</a></span><span class="op">(</span><span class="fl">0.95</span>, df<span class="op">=</span><span class="fl">1</span><span class="op">)</span></pre></div>
+<pre><code>## [1] 3.841459</code></pre>
+<p>So we reject <span class="math inline">\(H_0\)</span></p>
+<ol start="3" style="list-style-type: decimal">
+<li>Inference on deviance residuals 2</li>
+</ol>
+<p>Total residual deviance is <span class="math inline">\(\chi^2\)</span> distributed if the model is correctly specified + What is the critical value for rejecting <span class="math inline">\(H_0\)</span> at <span class="math inline">\(p &lt; 0.05\)</span> with a <span class="math inline">\(\chi^2\)</span> distribution of 9998 degrees of freedom?</p>
+<div class="sourceCode" id="cb5"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/stats/Chisquare.html">qchisq</a></span><span class="op">(</span><span class="fl">0.95</span>, df<span class="op">=</span><span class="fl">9998</span><span class="op">)</span></pre></div>
+<pre><code>## [1] 10231.73</code></pre>
+<p>Here total residual deviance is 10111, so we do <em>not</em> exceed the threshold and do not reject <span class="math inline">\(H_0\)</span> that the model is correctly specified.</p>
+<ol start="4" style="list-style-type: decimal">
+<li>Interpret deviance Residuals Plots</li>
+</ol>
+<p><img src="session_lab_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
+<ol start="5" style="list-style-type: decimal">
+<li>Example: Risky Drug Use Behavior</li>
+</ol>
+<ul>
+<li>Download the “needle_sharing” dataset</li>
+<li>Outcome is # times the drug user shared a syringe in the past month (shared_syr)</li>
+<li>Predictors: sex, ethn, homeless</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="downlit">
+<span class="va">needledat</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"needle_sharing.csv"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">needledat</span><span class="op">$</span><span class="va">shared_syr</span><span class="op">)</span></pre></div>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+##   0.000   0.000   0.000   2.976   0.000  60.000       5</code></pre>
+<div class="sourceCode" id="cb9"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">needledat</span><span class="op">$</span><span class="va">shared_syr</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></pre></div>
+<pre><code>## [1] 106.5978</code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li><p>Table of Risky Drug Use Behavior dataset</p></li>
+<li><p>Plots of Risky Drug Use Behavior</p></li>
+</ol>
+<p><img src="session_lab_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
+<ul>
+<li>There are a <em>lot</em> of zeros - Poisson model is not a good fit</li>
+</ul>
+<ol start="8" style="list-style-type: decimal">
+<li>Risky Drug Use Behavior: fitting a Poisson model</li>
+</ol>
+<pre><code>## 
+## Call:
+## glm(formula = shared_syr ~ sex + ethn + homeless, family = poisson(link = "log"), 
+##     data = needledat)
+## 
+## Deviance Residuals: 
+##    Min      1Q  Median      3Q     Max  
+## -5.057  -2.506  -2.030  -1.279  15.721  
+## 
+## Coefficients:
+##                     Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)          0.72332    0.14462   5.002 5.69e-07 ***
+## sexM                -0.92480    0.12133  -7.622 2.50e-14 ***
+## sexTrans           -15.08655  773.78384  -0.019   0.9844    
+## ethnFilipino       -14.52887  510.68253  -0.028   0.9773    
+## ethnHispanic         1.46454    0.16004   9.151  &lt; 2e-16 ***
+## ethnIndian         -14.10111  773.78385  -0.018   0.9855    
+## ethnIndian &amp; White -15.02591  773.78384  -0.019   0.9845    
+## ethnWhite            0.06064    0.13348   0.454   0.6496    
+## ethnWhite &amp; Hispa    0.86195    0.39872   2.162   0.0306 *  
+## homelessyes          1.28543    0.12664  10.150  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for poisson family taken to be 1)
+## 
+##     Null deviance: 1621.9  on 120  degrees of freedom
+## Residual deviance: 1364.8  on 111  degrees of freedom
+##   (7 observations deleted due to missingness)
+## AIC: 1483.8
+## 
+## Number of Fisher Scoring iterations: 12</code></pre>
+<ol start="9" style="list-style-type: decimal">
+<li>Risky Drug Use Behavior: residuals plots</li>
+</ol>
+<p><img src="session_lab_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
+  </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
