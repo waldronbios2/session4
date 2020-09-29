@@ -1,5 +1,5 @@
 ---
-title: "Session 4 lab exercise: What it's about"
+title: "Session 4 lab exercise: Poisson log-linear regression"
 author: "Levi Waldron"
 institute: "CUNY SPH Biostatistics 2"
 clean: false
@@ -20,6 +20,93 @@ always_allow_html: true
 
 **Exercises**
 
-1. Exercise 1
+1. Example by simulation
 
+```{r, echo=FALSE}
+set.seed(1)
+```
 
+```{r}
+simdat <- data.frame(race=sample(c("white", "non-white"), size=10000, replace=TRUE))
+simdat$race <- factor(simdat$race, levels=c("white", "non-white"))
+simdat$y <- rpois(10000, lambda=ifelse(simdat$race=="white", exp(3.5), exp(3)))
+fit <- glm(y ~ race, data=simdat, family=poisson("log"))
+summary(fit)
+```
+
+2. Inference on deviance residuals
+
+```{r, echo=FALSE, results='hide'}
+(df <- fit$df.residual) #residual degrees of freedom
+(res.dev <- sum(fit$deviance))  #total residual deviance
+```
+* The difference in total deviance between two nested models is $\chi^2$ distributed under $H_0$ that the more complex model is no better at explaining the response.
+     + The difference in deviance residuals is (26157 - 10111) = 16046, with a difference of 1 degrees of freedom.
+
+The critical threshold for rejection at p=0.05 is:
+```{r}
+qchisq(0.95, df=1)
+```
+
+So we reject $H_0$
+
+3. Inference on deviance residuals 2
+
+Total residual deviance is $\chi^2$ distributed if the model is correctly specified
+     + What is the critical value for rejecting $H_0$ at $p < 0.05$ with a $\chi^2$ distribution of 9998 degrees of freedom?
+```{r}
+qchisq(0.95, df=9998)
+```
+
+Here total residual deviance is 10111, so we do *not* exceed the threshold and do not reject $H_0$ that the model is correctly specified.
+
+4. Interpret deviance Residuals Plots
+
+```{r, echo=FALSE}
+par(mfrow=c(2,2))
+plot(fit)
+```
+
+5. Example: Risky Drug Use Behavior
+
+* Download the "needle_sharing" dataset
+* Outcome is # times the drug user shared a syringe in the past month (shared_syr)
+* Predictors: sex, ethn, homeless
+
+```{r}
+needledat = read.csv("needle_sharing.csv")
+summary(needledat$shared_syr)
+var(needledat$shared_syr, na.rm=TRUE)
+```
+
+5. Table of Risky Drug Use Behavior dataset
+
+6. Plots of Risky Drug Use Behavior
+
+```{r, echo=FALSE}
+par(mfrow=c(1,2), cex=2)
+hist(needledat$shared_syr, main="")
+plot(sort(needledat$shared_syr), pch=".")
+```
+
+* There are a _lot_ of zeros - Poisson model is not a good fit
+
+8. Risky Drug Use Behavior: fitting a Poisson model
+
+```{r, echo=FALSE}
+needledat$homeless <- factor(needledat$homeless, levels=0:1, 
+                             labels=c("no", "yes"))
+```
+
+```{r, echo=FALSE}
+fit.pois <- glm(shared_syr ~ sex + ethn + homeless, 
+           data=needledat, family=poisson(link="log"))
+summary(fit.pois)
+```
+
+9. Risky Drug Use Behavior: residuals plots
+
+```{r, echo=FALSE, warning=FALSE}
+par(mfrow=c(2,2))
+plot(fit.pois)
+```
