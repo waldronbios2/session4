@@ -379,10 +379,18 @@ log(E[Y_i]) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i +
 \begin{itemize}
 \tightlist
 \item
-  Count data are often modeled as Poisson distributed: + mean
-  \(\lambda\) is greater than 0 + variance is also \(\lambda\) +
-  Probability density
-  \(P(k, \lambda) = \frac{\lambda^k}{k!} e^{-\lambda}\)
+  Count data are often modeled as Poisson distributed:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    mean \(\lambda\) is greater than 0
+  \item
+    variance is also \(\lambda\)
+  \item
+    Probability density
+    \(P(k, \lambda) = \frac{\lambda^k}{k!} e^{-\lambda}\)
+  \end{itemize}
 \end{itemize}
 
 \includegraphics{../docs/articles/session_lecture_files/figure-beamer/unnamed-chunk-1-1.pdf}
@@ -550,8 +558,8 @@ log(\lambda_i) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + \b
   An \emph{offset} term can account for varying follow-up time or
   otherwise varying opportunity to be counted
 \item
-  Poisson distribution is high number of trials, low probability limit
-  of binomial distribution
+  Poisson distribution is limit of binomial distribution with high
+  number of trials, low probability
 \item
   Inference from log-linear models is sensitive to the choice of error
   model (assumption on the distribution of residuals)

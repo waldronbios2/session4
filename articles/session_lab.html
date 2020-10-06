@@ -103,16 +103,25 @@
     
 <p><strong>Learning objectives</strong></p>
 <ol style="list-style-type: decimal">
-<li>Learning objective 1</li>
+<li>Simulate Poisson-distributed data with a relevant covariate</li>
 </ol>
 <p><strong>Exercises</strong></p>
 <ol style="list-style-type: decimal">
-<li>Example by simulation</li>
+<li>Simulate count data from a Poisson distribution (for example number of hospital visits by persons over 70 in a 3-year period), where:
+<ol style="list-style-type: lower-alpha">
+<li>each person is annotated with “race” as “white” or “non-white”</li>
+<li>“white” persons have an average of 3.5 hospital visits during this time period</li>
+<li>“non-white” persons have an average of 3 hospital visits</li>
+</ol>
+</li>
 </ol>
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="no">simdat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="kw">race</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"white"</span>, <span class="st">"non-white"</span>), <span class="kw">size</span><span class="kw">=</span><span class="fl">10000</span>, <span class="kw">replace</span><span class="kw">=</span><span class="fl">TRUE</span>))
 <span class="no">simdat</span>$<span class="no">race</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">simdat</span>$<span class="no">race</span>, <span class="kw">levels</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"white"</span>, <span class="st">"non-white"</span>))
-<span class="no">simdat</span>$<span class="no">y</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html">rpois</a></span>(<span class="fl">10000</span>, <span class="kw">lambda</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="no">simdat</span>$<span class="no">race</span><span class="kw">==</span><span class="st">"white"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span>(<span class="fl">3.5</span>), <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span>(<span class="fl">3</span>)))
-<span class="no">fit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="no">y</span> ~ <span class="no">race</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">simdat</span>, <span class="kw">family</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/stats/family.html">poisson</a></span>(<span class="st">"log"</span>))
+<span class="no">simdat</span>$<span class="no">y</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html">rpois</a></span>(<span class="fl">10000</span>, <span class="kw">lambda</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="no">simdat</span>$<span class="no">race</span><span class="kw">==</span><span class="st">"white"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span>(<span class="fl">3.5</span>), <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span>(<span class="fl">3</span>)))</pre></body></html></div>
+<ol start="2" style="list-style-type: decimal">
+<li>Fit a log-linear Poisson model of count outcomes with “race” as covariate</li>
+</ol>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">fit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(<span class="no">y</span> ~ <span class="no">race</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">simdat</span>, <span class="kw">family</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/stats/family.html">poisson</a></span>(<span class="st">"log"</span>))
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">fit</span>)</pre></body></html></div>
 <pre><code>## 
 ## Call:
@@ -136,8 +145,8 @@
 ## AIC: 60834
 ## 
 ## Number of Fisher Scoring iterations: 4</code></pre>
-<ol start="2" style="list-style-type: decimal">
-<li>Inference on deviance residuals</li>
+<ol start="3" style="list-style-type: decimal">
+<li>Use a chi-square test on deviance residuals to test null hypothesis of no relationship between mean hospital visits and race.</li>
 </ol>
 <ul>
 <li>The difference in total deviance between two nested models is <span class="math inline">\(\chi^2\)</span> distributed under <span class="math inline">\(H_0\)</span> that the more complex model is no better at explaining the response.
@@ -147,20 +156,20 @@
 </li>
 </ul>
 <p>The critical threshold for rejection at p=0.05 is:</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/stats/Chisquare.html">qchisq</a></span>(<span class="fl">0.95</span>, <span class="kw">df</span><span class="kw">=</span><span class="fl">1</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/stats/Chisquare.html">qchisq</a></span>(<span class="fl">0.95</span>, <span class="kw">df</span><span class="kw">=</span><span class="fl">1</span>)</pre></body></html></div>
 <pre><code>## [1] 3.841459</code></pre>
 <p>So we reject <span class="math inline">\(H_0\)</span></p>
 <ol start="3" style="list-style-type: decimal">
 <li>Inference on deviance residuals 2</li>
 </ol>
 <p>Total residual deviance is <span class="math inline">\(\chi^2\)</span> distributed if the model is correctly specified + What is the critical value for rejecting <span class="math inline">\(H_0\)</span> at <span class="math inline">\(p &lt; 0.05\)</span> with a <span class="math inline">\(\chi^2\)</span> distribution of 9998 degrees of freedom?</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/stats/Chisquare.html">qchisq</a></span>(<span class="fl">0.95</span>, <span class="kw">df</span><span class="kw">=</span><span class="fl">9998</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/stats/Chisquare.html">qchisq</a></span>(<span class="fl">0.95</span>, <span class="kw">df</span><span class="kw">=</span><span class="fl">9998</span>)</pre></body></html></div>
 <pre><code>## [1] 10231.73</code></pre>
 <p>Here total residual deviance is 10111, so we do <em>not</em> exceed the threshold and do not reject <span class="math inline">\(H_0\)</span> that the model is correctly specified.</p>
 <ol start="4" style="list-style-type: decimal">
-<li>Interpret deviance Residuals Plots</li>
+<li>Create and discuss standard fit diagnostics plots</li>
 </ol>
-<p><img src="session_lab_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
+<p><img src="session_lab_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 <ol start="5" style="list-style-type: decimal">
 <li>Example: Risky Drug Use Behavior</li>
 </ol>
@@ -169,22 +178,47 @@
 <li>Outcome is # times the drug user shared a syringe in the past month (shared_syr)</li>
 <li>Predictors: sex, ethn, homeless</li>
 </ul>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">needledat</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span>(<span class="st">"needle_sharing.csv"</span>)
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">needledat</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span>(<span class="st">"needle_sharing.csv"</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">needledat</span>$<span class="no">shared_syr</span>)</pre></body></html></div>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
 ##   0.000   0.000   0.000   2.976   0.000  60.000       5</code></pre>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span>(<span class="no">needledat</span>$<span class="no">shared_syr</span>, <span class="kw">na.rm</span><span class="kw">=</span><span class="fl">TRUE</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span>(<span class="no">needledat</span>$<span class="no">shared_syr</span>, <span class="kw">na.rm</span><span class="kw">=</span><span class="fl">TRUE</span>)</pre></body></html></div>
 <pre><code>## [1] 106.5978</code></pre>
 <ol start="5" style="list-style-type: decimal">
-<li><p>Table of Risky Drug Use Behavior dataset</p></li>
+<li><p>Create a table of the risky drug use behavior dataset</p></li>
 <li><p>Plots of Risky Drug Use Behavior</p></li>
 </ol>
-<p><img src="session_lab_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
+<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="no">needledat</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="no">shared_syr</span>)) +
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span>() +
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="kw">title</span> <span class="kw">=</span> <span class="st">"Counts of Syringe Sharing Incidents Per Person"</span>) +
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span>(<span class="st">"Number of Incidents"</span>) +
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"Number of people with that count"</span>)</pre></body></html></div>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<pre><code>## Warning: Removed 5 rows containing non-finite values (stat_bin).</code></pre>
+<p><img src="session_lab_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
+<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">dplyr</span>)</pre></body></html></div>
+<pre><code>## 
+## Attaching package: 'dplyr'</code></pre>
+<pre><code>## The following objects are masked from 'package:stats':
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="no">needledat</span>, <span class="kw">rnk</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rank.html">rank</a></span>(<span class="no">shared_syr</span>, <span class="kw">ties.method</span> <span class="kw">=</span> <span class="st">"first"</span>)) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span><span class="kw">=</span><span class="no">rnk</span>, <span class="kw">y</span><span class="kw">=</span><span class="no">shared_syr</span>)) +
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>() +
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="kw">title</span> <span class="kw">=</span> <span class="st">"Count vs Rank Count of Syringe Sharing Incidents"</span>) +
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span>(<span class="st">"rank of count"</span>) +
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"count of syringe sharing"</span>)</pre></body></html></div>
+<pre><code>## Warning: Removed 5 rows containing missing values (geom_point).</code></pre>
+<p><img src="session_lab_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
 <ul>
 <li>There are a <em>lot</em> of zeros - Poisson model is not a good fit</li>
 </ul>
 <ol start="8" style="list-style-type: decimal">
-<li>Risky Drug Use Behavior: fitting a Poisson model</li>
+<li>Fit a Poisson model to the risky drug use behavior dataset anyways</li>
 </ol>
 <pre><code>## 
 ## Call:
@@ -219,9 +253,9 @@
 ## 
 ## Number of Fisher Scoring iterations: 12</code></pre>
 <ol start="9" style="list-style-type: decimal">
-<li>Risky Drug Use Behavior: residuals plots</li>
+<li>Create and discuss Poisson model diagnostic plots</li>
 </ol>
-<p><img src="session_lab_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
+<p><img src="session_lab_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

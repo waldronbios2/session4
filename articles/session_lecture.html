@@ -281,7 +281,14 @@ log(E[Y_i]) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i +
 <h2 class="hasAnchor">
 <a href="#the-poisson-distribution" class="anchor"></a>The Poisson distribution</h2>
 <ul>
-<li>Count data are often modeled as Poisson distributed: + mean <span class="math inline">\(\lambda\)</span> is greater than 0 + variance is also <span class="math inline">\(\lambda\)</span> + Probability density <span class="math inline">\(P(k, \lambda) = \frac{\lambda^k}{k!} e^{-\lambda}\)</span>
+<li>Count data are often modeled as Poisson distributed:
+<ul>
+<li>mean <span class="math inline">\(\lambda\)</span> is greater than 0</li>
+<li>variance is also <span class="math inline">\(\lambda\)</span>
+</li>
+<li>Probability density <span class="math inline">\(P(k, \lambda) = \frac{\lambda^k}{k!} e^{-\lambda}\)</span>
+</li>
+</ul>
 </li>
 </ul>
 <p><img src="session_lecture_files/figure-html/unnamed-chunk-1-1.png" width="700"></p>
@@ -390,7 +397,7 @@ log(\lambda_i) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + \b
 <li>The coefficients of log-linear models are <em>multiplicative</em>
 </li>
 <li>An <em>offset</em> term can account for varying follow-up time or otherwise varying opportunity to be counted</li>
-<li>Poisson distribution is high number of trials, low probability limit of binomial distribution</li>
+<li>Poisson distribution is limit of binomial distribution with high number of trials, low probability</li>
 <li>Inference from log-linear models is sensitive to the choice of error model (assumption on the distribution of residuals)</li>
 <li>We will cover other options next week for when the Poisson error model doesn’t fit:
 <ul>
