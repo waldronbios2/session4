@@ -16,11 +16,14 @@ always_allow_html: true
 
 **Learning objectives**
 
-1. Learning objective 1
+1. Simulate Poisson-distributed data with a relevant covariate
 
 **Exercises**
 
-1. Example by simulation
+1. Simulate count data from a Poisson distribution (for example number of hospital visits by persons over 70 in a 3-year period), where:
+    a. each person is annotated with "race" as "white" or "non-white"
+    b. "white" persons have an average of 3.5 hospital visits during this time period
+    c. "non-white" persons have an average of 3 hospital visits
 
 ```{r, echo=FALSE}
 set.seed(1)
@@ -30,16 +33,22 @@ set.seed(1)
 simdat <- data.frame(race=sample(c("white", "non-white"), size=10000, replace=TRUE))
 simdat$race <- factor(simdat$race, levels=c("white", "non-white"))
 simdat$y <- rpois(10000, lambda=ifelse(simdat$race=="white", exp(3.5), exp(3)))
+```
+
+2. Fit a log-linear Poisson model of count outcomes with "race" as covariate
+
+```{r}
 fit <- glm(y ~ race, data=simdat, family=poisson("log"))
 summary(fit)
 ```
 
-2. Inference on deviance residuals
+3. Use a chi-square test on deviance residuals to test null hypothesis of no relationship between mean hospital visits and race.
 
 ```{r, echo=FALSE, results='hide'}
 (df <- fit$df.residual) #residual degrees of freedom
 (res.dev <- sum(fit$deviance))  #total residual deviance
 ```
+
 * The difference in total deviance between two nested models is $\chi^2$ distributed under $H_0$ that the more complex model is no better at explaining the response.
      + The difference in deviance residuals is (26157 - 10111) = 16046, with a difference of 1 degrees of freedom.
 
@@ -60,7 +69,7 @@ qchisq(0.95, df=9998)
 
 Here total residual deviance is 10111, so we do *not* exceed the threshold and do not reject $H_0$ that the model is correctly specified.
 
-4. Interpret deviance Residuals Plots
+4. Create and discuss standard fit diagnostics plots
 
 ```{r, echo=FALSE}
 par(mfrow=c(2,2))
@@ -79,7 +88,7 @@ summary(needledat$shared_syr)
 var(needledat$shared_syr, na.rm=TRUE)
 ```
 
-5. Table of Risky Drug Use Behavior dataset
+5. Create a table of the risky drug use behavior dataset
 
 6. Plots of Risky Drug Use Behavior
 
@@ -89,9 +98,22 @@ hist(needledat$shared_syr, main="")
 plot(sort(needledat$shared_syr), pch=".")
 ```
 
+```{r}
+library(ggplot2)
+ggplot(needledat, aes(shared_syr)) +
+  geom_histogram()
+```
+
+```{r}
+library(dplyr)
+mutate(needledat, rnk = rank(shared_syr, ties.method = "first")) %>%
+  ggplot(aes(x=rnk, y=shared_syr)) +
+  geom_dotplot()
+```
+
 * There are a _lot_ of zeros - Poisson model is not a good fit
 
-8. Risky Drug Use Behavior: fitting a Poisson model
+8. Fit a Poisson model to the risky drug use behavior dataset anyways
 
 ```{r, echo=FALSE}
 needledat$homeless <- factor(needledat$homeless, levels=0:1, 
@@ -104,7 +126,7 @@ fit.pois <- glm(shared_syr ~ sex + ethn + homeless,
 summary(fit.pois)
 ```
 
-9. Risky Drug Use Behavior: residuals plots
+9. Create and discuss Poisson model diagnostic plots
 
 ```{r, echo=FALSE, warning=FALSE}
 par(mfrow=c(2,2))

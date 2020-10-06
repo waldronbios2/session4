@@ -154,12 +154,12 @@ $$
 ## The Poisson distribution
 
 * Count data are often modeled as Poisson distributed:
-       + mean $\lambda$ is greater than 0
-       + variance is also $\lambda$
-       + Probability density $P(k, \lambda) = \frac{\lambda^k}{k!} e^{-\lambda}$
+  + mean $\lambda$ is greater than 0
+  + variance is also $\lambda$
+  + Probability density $P(k, \lambda) = \frac{\lambda^k}{k!} e^{-\lambda}$
        
 ```{r, echo=FALSE}
-par(cex=2)  #increase size of type and axes
+par(cex=1)  #increase size of type and axes
 plot(x=0:10, y=dpois(0:10, lambda=1), 
      type="b", lwd=2,
      xlab="Counts (k)", ylab="Probability density")
@@ -256,7 +256,7 @@ $$
     + probability of each event is low
 2. The coefficients of log-linear models are _multiplicative_
 3. An _offset_ term can account for varying follow-up time or otherwise varying opportunity to be counted
-4. Poisson distribution is high number of trials, low probability limit of binomial distribution
+4. Poisson distribution is limit of binomial distribution with high number of trials, low probability 
 5. Inference from log-linear models is sensitive to the choice of error model (assumption on the distribution of residuals)
 6. We will cover other options next week for when the Poisson error model doesn't fit:
     + Variance proportional to mean, instead of equal
