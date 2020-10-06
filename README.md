@@ -2,16 +2,31 @@
 [![Actions Status](https://github.com/waldronbios2/session4/workflows/build/badge.svg)](https://github.com/waldronbios2/templatesession/actions)
 <!-- badges: end -->
 
-# Session N: title
+# Session 4: loglinear regression part 1
 
-## Lecture
+## Learning objectives
 
-**Learning Objectives**
+1. Define log-linear models in GLM framework
+2. Identify situations that motivate use of log-linear models
+3. Assess model fit of log-linear models
+4. Define multi-collinearity
 
-**Outline**
+## Outline
 
-## Lab
+1. brief review of GLMs
+2. Motivating example for log-linear models
+    + Poisson regression
+3. Checking model assumptions and fit: Residual Analysis
+4. Note on collinearity
 
-**Learning Objectives**
+Reading: Vittinghoff textbook chapter 8.1-8.3
 
-**Exercises**
+# Lab
+
+## Learning Objectives
+
+1. Simulate Poisson-distributed data with a relevant covariate
+2. Fit a Poisson log-linear GLM
+3. Create and interpret diagnostic plots for a log-linear GLM
+4. Use analysis of deviance to compare two log-linear GLMs
+5. Practice recoding and creating tables and plots
