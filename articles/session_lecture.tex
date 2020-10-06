@@ -1,35 +1,32 @@
-% Options for packages loaded elsewhere
-\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{unicode=true}{hyperref} % options for packages loaded elsewhere
 \PassOptionsToPackage{hyphens}{url}
 %
-\documentclass[
-  ignorenonframetext,
-]{beamer}
+\documentclass[ignorenonframetext,]{beamer}
 \usepackage{pgfpages}
 \setbeamertemplate{caption}[numbered]
 \setbeamertemplate{caption label separator}{: }
 \setbeamercolor{caption name}{fg=normal text.fg}
 \beamertemplatenavigationsymbolsempty
-% Prevent slide breaks in the middle of a paragraph
+% Prevent slide breaks in the middle of a paragraph:
 \widowpenalties 1 10000
 \raggedbottom
 \setbeamertemplate{part page}{
-  \centering
-  \begin{beamercolorbox}[sep=16pt,center]{part title}
-    \usebeamerfont{part title}\insertpart\par
-  \end{beamercolorbox}
+\centering
+\begin{beamercolorbox}[sep=16pt,center]{part title}
+  \usebeamerfont{part title}\insertpart\par
+\end{beamercolorbox}
 }
 \setbeamertemplate{section page}{
-  \centering
-  \begin{beamercolorbox}[sep=12pt,center]{part title}
-    \usebeamerfont{section title}\insertsection\par
-  \end{beamercolorbox}
+\centering
+\begin{beamercolorbox}[sep=12pt,center]{part title}
+  \usebeamerfont{section title}\insertsection\par
+\end{beamercolorbox}
 }
 \setbeamertemplate{subsection page}{
-  \centering
-  \begin{beamercolorbox}[sep=8pt,center]{part title}
-    \usebeamerfont{subsection title}\insertsubsection\par
-  \end{beamercolorbox}
+\centering
+\begin{beamercolorbox}[sep=8pt,center]{part title}
+  \usebeamerfont{subsection title}\insertsubsection\par
+\end{beamercolorbox}
 }
 \AtBeginPart{
   \frame{\partpage}
@@ -46,43 +43,38 @@
 \usepackage{lmodern}
 \usepackage{amssymb,amsmath}
 \usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
 \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
-  \usepackage{textcomp} % provide euro and other symbols
-\else % if luatex or xetex
+  \usepackage{textcomp} % provides euro and other symbols
+\else % if luatex or xelatex
   \usepackage{unicode-math}
-  \defaultfontfeatures{Scale=MatchLowercase}
-  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
 \fi
 \usetheme[]{Hannover}
 \usecolortheme{dove}
 \usefonttheme{structurebold}
-% Use upquote if available, for straight quotes in verbatim environments
+% use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
-\IfFileExists{microtype.sty}{% use microtype if available
-  \usepackage[]{microtype}
-  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage[]{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 }{}
-\makeatletter
-\@ifundefined{KOMAClassName}{% if non-KOMA class
-  \IfFileExists{parskip.sty}{%
-    \usepackage{parskip}
-  }{% else
-    \setlength{\parindent}{0pt}
-    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
-}{% if KOMA class
-  \KOMAoptions{parskip=half}}
-\makeatother
-\usepackage{xcolor}
-\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\usepackage{hyperref}
 \hypersetup{
-  pdftitle={Session 4: What this lecture is about},
-  pdfauthor={Levi Waldron},
-  hidelinks,
-  pdfcreator={LaTeX via pandoc}}
-\urlstyle{same} % disable monospaced font for URLs
+            pdftitle={Session 4: loglinear regression part 1},
+            pdfauthor={Levi Waldron},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
 \newif\ifbibliography
 \usepackage{graphicx,grffile}
 \makeatletter
@@ -93,19 +85,22 @@
 % margins by default, and it is still possible to overwrite the defaults
 % using explicit options in \includegraphics[width, height, ...]{}
 \setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
-% Set default figure placement to htbp
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+
+% set default figure placement to htbp
 \makeatletter
 \def\fps@figure{htbp}
 \makeatother
-\setlength{\emergencystretch}{3em} % prevent overfull lines
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 
-\title{Session 4: What this lecture is about}
+
+\title{Session 4: loglinear regression part 1}
 \author{Levi Waldron}
-\date{}
+\providecommand{\institute}[1]{}
 \institute{CUNY SPH Biostatistics 2}
+\date{}
 
 \begin{document}
 \frame{\titlepage}
@@ -217,23 +212,19 @@ Reading: Vittinghoff textbook chapter 8.1-8.3
   \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_p x_{pi}
   \]
 \item
-  \textbf{Link function}: \emph{logit} (log of the odds that the event
-  occurs)
+  \textbf{Link function}: \emph{logit} (Converts Prob -\textgreater{}
+  log-odds) \[
+  g(P(x)) = logit(P(x)) = log\left( \frac{P(x)}{1-P(x)} \right)
+  \] \[
+  P(x) = g^{-1}\left( \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_p x_{pi}
+   \right)
+  \]
 \end{itemize}
-
-\[
-g(P(x)) = logit(P(x)) = log\left( \frac{P(x)}{1-P(x)} \right)
-\]
-
-\[
-P(x) = g^{-1}\left( \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_p x_{pi}
- \right)
-\]
 
 \end{frame}
 
 \begin{frame}{Additive vs.~Multiplicative models}
-\protect\hypertarget{additive-vs.-multiplicative-models}{}
+\protect\hypertarget{additive-vs.multiplicative-models}{}
 
 \begin{itemize}
 \tightlist
@@ -267,9 +258,8 @@ P(x) = g^{-1}\left( \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_p x_
 \section{Motivating example for log-linear
 models}\label{motivating-example-for-log-linear-models}}
 
-\begin{frame}{Effectiveness of a new case-management program for
-depression}
-\protect\hypertarget{effectiveness-of-a-new-case-management-program-for-depression}{}
+\begin{frame}{Effectiveness of a depression case-management program}
+\protect\hypertarget{effectiveness-of-a-depression-case-management-program}{}
 
 \begin{itemize}
 \tightlist
@@ -358,13 +348,21 @@ patient \emph{i}.
 
 \end{frame}
 
-\begin{frame}{Accounting for time of follow-up}
-\protect\hypertarget{accounting-for-time-of-follow-up}{}
+\begin{frame}{Accounting for follow-up time}
+\protect\hypertarget{accounting-for-follow-up-time}{}
 
 Instead, model mean count per unit time: \[
-log(E[Y_i]/t_i) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + \beta_3 \textrm{ALCH}_i + \beta_4 \textrm{DRUG}_i
-\] Or equivalently: \[
-log(E[Y_i]) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + \beta_3 \textrm{ALCH}_i + \beta_4 \textrm{DRUG}_i + log(t_i)
+\begin{aligned}
+log(E[Y_i]/t_i) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + 
+\beta_3 \textrm{ALCH}_i + \nonumber \\ \beta_4 \textrm{DRUG}_i
+\end{aligned}
+\]
+
+Or equivalently: \[
+\begin{aligned}
+log(E[Y_i]) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + 
+\beta_3 \textrm{ALCH}_i + \nonumber \\ \beta_4 \textrm{DRUG}_i + log(t_i)
+\end{aligned}
 \]
 
 \begin{itemize}
@@ -397,18 +395,26 @@ log(E[Y_i]) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + \beta
 \begin{itemize}
 \tightlist
 \item
-  TODO
-\end{itemize}
+  Individual events are low-probability (small p), but many
+  opportunities (large n)
 
-\end{frame}
-
-\begin{frame}{Relationship betwen Poisson and Binomial distributions}
-\protect\hypertarget{relationship-betwen-poisson-and-binomial-distributions}{}
-
-\begin{itemize}
-\tightlist
+  \begin{itemize}
+  \tightlist
+  \item
+    e.g. \# 911 calls per day
+  \item
+    e.g. \# emergency room visits
+  \end{itemize}
 \item
-  TODO
+  Approximates the binomial distribution when n is large and p is small
+
+  \begin{itemize}
+  \tightlist
+  \item
+    e.g. \(n > 20\), \(np < 5\) or \(n(1-p) < 5\)
+  \end{itemize}
+\item
+  When mean of residuals is approx. equal to variance
 \end{itemize}
 
 \end{frame}
@@ -426,8 +432,12 @@ log(E[Y_i]) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + \beta
 \(E[Y_i]/t_i = \lambda_i\) \newline \(log(E[Y_i]/t_i) = log(\lambda_i)\)
 \newline \(log(E[Y_i]) = log(\lambda_i) + log(t_i)\) \newline
 
-Recalling the log-linear model systematic component:
-\[log(E[Y_i]) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + \beta_3 \textrm{ALCH}_i + \beta_4 \textrm{DRUG}_i + log(t_i)\]
+Recalling the log-linear model systematic component: \[
+\begin{aligned}
+log(E[Y_i]) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + 
+\beta_3 \textrm{ALCH}_i + \nonumber \\ \beta_4 \textrm{DRUG}_i + log(t_i)
+\end{aligned}
+\]
 
 \end{frame}
 
@@ -532,13 +542,16 @@ log(\lambda_i) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + \b
   \begin{itemize}
   \tightlist
   \item
-    such situations arise when the probability of each event is low
+    probability of each event is low
   \end{itemize}
 \item
   The coefficients of log-linear models are \emph{multiplicative}
 \item
   An \emph{offset} term can account for varying follow-up time or
   otherwise varying opportunity to be counted
+\item
+  Poisson distribution is high number of trials, low probability limit
+  of binomial distribution
 \item
   Inference from log-linear models is sensitive to the choice of error
   model (assumption on the distribution of residuals)

@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Session 4: What this lecture is about • session4</title>
+<title>Session 4: loglinear regression part 1 • session4</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/lumen/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Session 4: What this lecture is about">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Session 4: loglinear regression part 1">
 <meta property="og:description" content="session4">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -87,10 +87,10 @@
 
       
 
-      </header><script src="session_lecture_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Session 4: What this lecture is about</h1>
+      <h1 data-toc-skip>Session 4: loglinear regression part 1</h1>
                         <h4 class="author">Levi Waldron</h4>
             
       
@@ -166,19 +166,17 @@ Logit(P(x)) = log \left( \frac{P(x)}{1-P(x)} \right) = \beta_0 + \beta_1 x_{1i} 
 <li><p><strong>Systematic component</strong>: linear predictor <span class="math display">\[
 \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_p x_{pi}
 \]</span></p></li>
-<li><p><strong>Link function</strong>: <em>logit</em> (log of the odds that the event occurs)</p></li>
-</ul>
-<p><span class="math display">\[
+<li><p><strong>Link function</strong>: <em>logit</em> (Converts Prob -&gt; log-odds) <span class="math display">\[
 g(P(x)) = logit(P(x)) = log\left( \frac{P(x)}{1-P(x)} \right)
-\]</span></p>
-<p><span class="math display">\[
+\]</span> <span class="math display">\[
 P(x) = g^{-1}\left( \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_p x_{pi}
  \right)
-\]</span></p>
+\]</span></p></li>
+</ul>
 </div>
-<div id="additive-vs--multiplicative-models" class="section level2">
+<div id="additive-vs-multiplicative-models" class="section level2">
 <h2 class="hasAnchor">
-<a href="#additive-vs--multiplicative-models" class="anchor"></a>Additive vs. Multiplicative models</h2>
+<a href="#additive-vs-multiplicative-models" class="anchor"></a>Additive vs. Multiplicative models</h2>
 <ul>
 <li>Linear regression is an <em>additive</em> model
 <ul>
@@ -202,9 +200,9 @@ P(x) = g^{-1}\left( \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_p x_
 <div id="motivating-example-for-log-linear-models" class="section level1">
 <h1 class="hasAnchor">
 <a href="#motivating-example-for-log-linear-models" class="anchor"></a>Motivating example for log-linear models</h1>
-<div id="effectiveness-of-a-new-case-management-program-for-depression" class="section level2">
+<div id="effectiveness-of-a-depression-case-management-program" class="section level2">
 <h2 class="hasAnchor">
-<a href="#effectiveness-of-a-new-case-management-program-for-depression" class="anchor"></a>Effectiveness of a new case-management program for depression</h2>
+<a href="#effectiveness-of-a-depression-case-management-program" class="anchor"></a>Effectiveness of a depression case-management program</h2>
 <ul>
 <li>Research question: can a new treatment reduce the number of needed visits to the emergency room, compared to standard care?</li>
 <li>
@@ -258,13 +256,20 @@ E[Y_i] = exp \left( \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i +
 </li>
 </ul>
 </div>
-<div id="accounting-for-time-of-follow-up" class="section level2">
+<div id="accounting-for-follow-up-time" class="section level2">
 <h2 class="hasAnchor">
-<a href="#accounting-for-time-of-follow-up" class="anchor"></a>Accounting for time of follow-up</h2>
+<a href="#accounting-for-follow-up-time" class="anchor"></a>Accounting for follow-up time</h2>
 <p>Instead, model mean count per unit time: <span class="math display">\[
-log(E[Y_i]/t_i) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + \beta_3 \textrm{ALCH}_i + \beta_4 \textrm{DRUG}_i
-\]</span> Or equivalently: <span class="math display">\[
-log(E[Y_i]) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + \beta_3 \textrm{ALCH}_i + \beta_4 \textrm{DRUG}_i + log(t_i)
+\begin{aligned}
+log(E[Y_i]/t_i) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + 
+\beta_3 \textrm{ALCH}_i + \nonumber \\ \beta_4 \textrm{DRUG}_i
+\end{aligned}
+\]</span></p>
+<p>Or equivalently: <span class="math display">\[
+\begin{aligned}
+log(E[Y_i]) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + 
+\beta_3 \textrm{ALCH}_i + \nonumber \\ \beta_4 \textrm{DRUG}_i + log(t_i)
+\end{aligned}
 \]</span></p>
 <ul>
 <li>
@@ -285,14 +290,19 @@ log(E[Y_i]) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + \beta
 <h2 class="hasAnchor">
 <a href="#when-the-poisson-distribution-works" class="anchor"></a>When the Poisson distribution works</h2>
 <ul>
-<li>TODO</li>
-</ul>
-</div>
-<div id="relationship-betwen-poisson-and-binomial-distributions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#relationship-betwen-poisson-and-binomial-distributions" class="anchor"></a>Relationship betwen Poisson and Binomial distributions</h2>
+<li>Individual events are low-probability (small p), but many opportunities (large n)
 <ul>
-<li>TODO</li>
+<li>e.g. # 911 calls per day</li>
+<li>e.g. # emergency room visits</li>
+</ul>
+</li>
+<li>Approximates the binomial distribution when n is large and p is small
+<ul>
+<li>e.g. <span class="math inline">\(n &gt; 20\)</span>, <span class="math inline">\(np &lt; 5\)</span> or <span class="math inline">\(n(1-p) &lt; 5\)</span>
+</li>
+</ul>
+</li>
+<li>When mean of residuals is approx. equal to variance</li>
 </ul>
 </div>
 <div id="glm-with-log-linear-link-and-poisson-error-model" class="section level2">
@@ -303,7 +313,12 @@ log(E[Y_i]) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + \beta
 </li>
 </ul>
 <p><span class="math inline">\(E[Y_i]/t_i = \lambda_i\)</span>  <span class="math inline">\(log(E[Y_i]/t_i) = log(\lambda_i)\)</span>  <span class="math inline">\(log(E[Y_i]) = log(\lambda_i) + log(t_i)\)</span> </p>
-<p>Recalling the log-linear model systematic component: <span class="math display">\[log(E[Y_i]) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + \beta_3 \textrm{ALCH}_i + \beta_4 \textrm{DRUG}_i + log(t_i)\]</span></p>
+<p>Recalling the log-linear model systematic component: <span class="math display">\[
+\begin{aligned}
+log(E[Y_i]) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + 
+\beta_3 \textrm{ALCH}_i + \nonumber \\ \beta_4 \textrm{DRUG}_i + log(t_i)
+\end{aligned}
+\]</span></p>
 </div>
 <div id="glm-with-log-linear-link-and-poisson-error-model-contd" class="section level2">
 <h2 class="hasAnchor">
@@ -369,12 +384,13 @@ log(\lambda_i) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + \b
 <ol style="list-style-type: decimal">
 <li>Log-linear models are appropriate for non-negative, skewed count data
 <ul>
-<li>such situations arise when the probability of each event is low</li>
+<li>probability of each event is low</li>
 </ul>
 </li>
 <li>The coefficients of log-linear models are <em>multiplicative</em>
 </li>
 <li>An <em>offset</em> term can account for varying follow-up time or otherwise varying opportunity to be counted</li>
+<li>Poisson distribution is high number of trials, low probability limit of binomial distribution</li>
 <li>Inference from log-linear models is sensitive to the choice of error model (assumption on the distribution of residuals)</li>
 <li>We will cover other options next week for when the Poisson error model doesn’t fit:
 <ul>
@@ -403,7 +419,7 @@ log(\lambda_i) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + \b
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>
