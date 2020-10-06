@@ -7,6 +7,7 @@ Authors@R: person("Levi", "Waldron", , "lwaldron.research@gmail.com", role = c("
 Maintainer: Levi Waldron <lwaldron.research@gmail.com>
 Description: Loglinear regression part 1
 Imports:
+    tableone,
     tidyverse
 Suggests:
     pkgdown,

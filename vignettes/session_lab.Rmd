@@ -87,7 +87,7 @@ plot(fit)
 * Outcome is # times the drug user shared a syringe in the past month (`shared_syr`)
 * Predictors: sex, ethn, homeless
 
-```{r}
+```{r loaddata}
 library(readr)
 needledat = read_csv("needle_sharing.csv")
 summary(needledat$shared_syr)
@@ -95,8 +95,8 @@ var(needledat$shared_syr, na.rm=TRUE)
 ```
 
 Some recoding:
-```{r, echo=FALSE}
-library(dplyr)
+```{r recode}
+suppressPackageStartupMessages(library(dplyr))
 needledat_cleaned <-
   mutate(needledat,
     homeless = factor(homeless, levels = 0:1, labels = c("No", "Yes")),
@@ -120,7 +120,7 @@ a. Create a histogram number of syringe uses
 
 b. Create a scatter plot of number of syringe uses versus rank of number of syringe uses
 
-```{r}
+```{r histogram}
 library(ggplot2)
 ggplot(needledat, aes(shared_syr)) +
   geom_histogram() +
@@ -129,7 +129,7 @@ ggplot(needledat, aes(shared_syr)) +
   ylab("Number of people with that count")
 ```
 
-```{r}
+```{r rankplot}
 library(dplyr)
 mutate(needledat, rnk = rank(shared_syr, ties.method = "first")) %>%
   ggplot(aes(x = rnk, y = shared_syr)) +
@@ -143,7 +143,7 @@ mutate(needledat, rnk = rank(shared_syr, ties.method = "first")) %>%
 
 8. Fit a Poisson model to the risky drug use behavior dataset anyways
 
-```{r, echo=FALSE}
+```{r glmfit}
 fit.pois <- glm(shared_syr ~ sex + ethn + homeless,
                 data = needledat,
                 family = poisson(link = "log"))
@@ -152,7 +152,7 @@ summary(fit.pois)
 
 9. Create and discuss Poisson model diagnostic plots
 
-```{r, echo=FALSE, warning=FALSE}
+```{r diagnostic}
 par(mfrow = c(2, 2))
 plot(fit.pois)
 ```
