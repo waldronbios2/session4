@@ -1,5 +1,5 @@
 ---
-title: 'Session 4: What this lecture is about'
+title: 'Session 4: loglinear regression part 1'
 author: "Levi Waldron"
 clean: false
 output:
@@ -72,12 +72,10 @@ $$
 \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_p x_{pi}
 $$
 
-* **Link function**: _logit_ (log of the odds that the event occurs)
-
+* **Link function**: _logit_ (Converts Prob -> log-odds)
 $$
 g(P(x)) = logit(P(x)) = log\left( \frac{P(x)}{1-P(x)} \right)
 $$
-
 $$
 P(x) = g^{-1}\left( \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_p x_{pi}
  \right)
@@ -95,7 +93,7 @@ $$
 
 # Motivating example for log-linear models
 
-## Effectiveness of a new case-management program for depression 
+## Effectiveness of a depression case-management program 
 
 * Research question: can a new treatment reduce the number of needed visits to the emergency room, compared to standard care?
 * *outcome*: # of emergency room visits for each patient in the year following initial treatment
@@ -133,15 +131,20 @@ where $E[Y_i]$ is the expected number of emergency room visits for patient _i_.
 
 * Important note: Modeling $log(E[Y_i])$ is _not_ equivalent to modeling $E(log(Y_i))$
 
-## Accounting for time of follow-up
+## Accounting for follow-up time
 
 Instead, model mean count per unit time:
+
 $$
-log(E[Y_i]/t_i) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + \beta_3 \textrm{ALCH}_i + \beta_4 \textrm{DRUG}_i
+log(E[Y_i]/t_i) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + \\
+\beta_3 \textrm{ALCH}_i + \beta_4 \textrm{DRUG}_i
 $$
+
 Or equivalently:
+
 $$
-log(E[Y_i]) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + \beta_3 \textrm{ALCH}_i + \beta_4 \textrm{DRUG}_i + log(t_i)
+log(E[Y_i]) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + \\
+\beta_3 \textrm{ALCH}_i + \beta_4 \textrm{DRUG}_i + log(t_i)
 $$
 
 * $log(t_i)$ is not a covariate, it is called an _offset_
