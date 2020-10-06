@@ -8,15 +8,15 @@
 
 1. Define log-linear models in GLM framework
 2. Identify situations that motivate use of log-linear models
-3. Assess model fit of log-linear models
-4. Define multi-collinearity
+3. Define the Poisson distribution and the log-linear Poisson GLM
+4. Identify applications and properties of the Poisson distribution 
+5. Define multi-collinearity
 
 ## Outline
 
-1. brief review of GLMs
+1. Brief review of GLMs
 2. Motivating example for log-linear models
-    + Poisson regression
-3. Checking model assumptions and fit: Residual Analysis
+3. Poisson log-linear GLM
 4. Note on collinearity
 
 Reading: Vittinghoff textbook chapter 8.1-8.3
