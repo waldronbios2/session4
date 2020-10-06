@@ -92,23 +92,23 @@ var(needledat$shared_syr, na.rm=TRUE)
 
 6. Plots of Risky Drug Use Behavior
 
-```{r, echo=FALSE}
-par(mfrow=c(1,2), cex=2)
-hist(needledat$shared_syr, main="")
-plot(sort(needledat$shared_syr), pch=".")
-```
-
 ```{r}
 library(ggplot2)
 ggplot(needledat, aes(shared_syr)) +
-  geom_histogram()
+  geom_histogram() + 
+  labs(title = "Counts of Syringe Sharing Incidents Per Person") + 
+  xlab("Number of Incidents") + 
+  ylab("Number of people with that count")
 ```
 
 ```{r}
 library(dplyr)
 mutate(needledat, rnk = rank(shared_syr, ties.method = "first")) %>%
   ggplot(aes(x=rnk, y=shared_syr)) +
-  geom_dotplot()
+  geom_point() + 
+  labs(title = "Count vs Rank Count of Syringe Sharing Incidents") + 
+  xlab("rank of count") + 
+  ylab("count of syringe sharing")
 ```
 
 * There are a _lot_ of zeros - Poisson model is not a good fit
