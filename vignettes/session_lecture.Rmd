@@ -261,7 +261,7 @@ $$
 ## Example: US Judge Ratings dataset
 
 See `?USJudgeRatings` for dataset, `?pairs` for plot code:
-```{r, echo=FALSE}
+```{r, echo=FALSE, fig.height=5}
 panel.cor <- function(x, y, digits = 2, prefix = "", cex.cor, ...)
 {
     usr <- par("usr"); on.exit(par(usr))
@@ -280,7 +280,8 @@ pairs(USJudgeRatings, lower.panel = panel.smooth, upper.panel = panel.cor,
 ## Example: iris dataset
 
 One categorical variable, so use model matrix. Make a simple heatmap.
-```{r}
+\tiny
+```{r, fig.height=5}
 mm <- model.matrix( ~ ., data = iris)
 pheatmap::pheatmap(cor(mm[, -1]), #-1 gets rid of intercept column
   color = colorRampPalette(c("#f0f0f0", "#bdbdbd", "#636363"))(100))
@@ -290,9 +291,9 @@ _Note:_ multicollinearity exists between multiple predictors, not between predic
 ## Example: iris dataset
 
 Confirm what in iris dataset using Variance Inflation Factor of a linear regression model:
+\tiny
 ```{r}
 fit <- lm(Sepal.Width ~ ., data = iris)
-summary(fit)
 car::vif(fit)
 ```
 
@@ -300,6 +301,7 @@ car::vif(fit)
 ## Approaches for dealing with multicollinearity
 
 Options:
+
 1. Select a representative variable
 2. Average variables
 3. Principal Component Analysis or other dimension reducuction
