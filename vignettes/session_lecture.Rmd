@@ -29,18 +29,18 @@ institute: CUNY SPH Biostatistics 2
 2. Identify situations that motivate use of log-linear models
 3. Define the Poisson distribution and the log-linear Poisson GLM
 4. Identify applications and properties of the Poisson distribution 
-5. Define multi-collinearity
+5. Define multicollinearity and identify resulting issues
 
 ## Outline
 
 1. Brief review of GLMs
 2. Motivating example for log-linear models
 3. Poisson log-linear GLM
-4. Note on collinearity
+4. Notes on Multicollinearity
 
 Reading: Vittinghoff textbook chapter 8.1-8.3
 
-# Review
+# Brief review of GLMs
 
 ## Components of GLM
 
@@ -111,6 +111,8 @@ $$
         + over 1/2 the transformed data would have values of 0 or $log(2)$
 4. a linear regression model would give negative predictions for some covariate combinations
 5. some subjects die or cannot be followed up on for a whole year
+
+# Poisson log-linear GLM
 
 ## Towards a reasonable model
 
@@ -238,16 +240,71 @@ $$
        - equivalently, the average rate of usage for whites is 65% higher than that for non-whites
 * Multiplicative rules apply for other coefficients as well, because they are exponentiated to estimate the mean rate.
 
-# Multicollinearity
+# Multi-collinearity
 
-## Note on Multicollinearity
+## What is Multicollinearity?
 
 1. *Multicollinearity* exists when two or more of the independent variables in regression are moderately or highly correlated.
-2. Multicollinearity implies near-linear relationship among the predictors
-3. The presence of near-linear dependence dramatically impacts the ability to estimate regression coefficients
-4. High multicollinearity results in larger standard errors for regression coefficients
-    + estimates of such regression coefficients will tend to be less stable over repeated sampling
-    
+2. Hi correlation among continuous predictors or high concordance among categorical predictors
+3. Impacts the ability to estimate regression coefficients
+    + larger standard errors for regression coefficients
+    + ie, coefficients are unstable over repeated sampling
+    + exact collinearity produces infinite standard errors on coefficients
+4. Can also result in unstable (high variance) prediction models
+
+## Identifying multicollinearity
+
+1. Pairwise correlations of data or of model matrix (latter works with categorical variables)
+2. Heat maps
+3. Variance Inflation Factor (VIF) of regression coefficients
+
+## Example: US Judge Ratings dataset
+
+See `?USJudgeRatings` for dataset, `?pairs` for plot code:
+```{r, echo=FALSE}
+panel.cor <- function(x, y, digits = 2, prefix = "", cex.cor, ...)
+{
+    usr <- par("usr"); on.exit(par(usr))
+    par(usr = c(0, 1, 0, 1))
+    r <- abs(cor(x, y))
+    txt <- format(c(r, 0.123456789), digits = digits)[1]
+    txt <- paste0(prefix, txt)
+    if(missing(cex.cor)) cex.cor <- 0.8/strwidth(txt)
+    text(0.5, 0.5, txt, cex = cex.cor * r)
+}
+pairs(USJudgeRatings, lower.panel = panel.smooth, upper.panel = panel.cor,
+      gap=0, row1attop=FALSE)
+```
+**Pairwise scatterplot of continuous variables in US Judge Ratings dataset
+
+## Example: iris dataset
+
+One categorical variable, so use model matrix. Make a simple heatmap.
+```{r}
+mm <- model.matrix( ~ ., data = iris)
+pheatmap::pheatmap(cor(mm[, -1]), #-1 gets rid of intercept column
+  color = colorRampPalette(c("#f0f0f0", "#bdbdbd", "#636363"))(100))
+```
+_Note:_ multicollinearity exists between multiple predictors, not between predictor and outcome
+
+## Example: iris dataset
+
+Confirm what in iris dataset using Variance Inflation Factor of a linear regression model:
+```{r}
+fit <- lm(Sepal.Width ~ ., data = iris)
+summary(fit)
+car::vif(fit)
+```
+
+
+## Approaches for dealing with multicollinearity
+
+Options:
+1. Select a representative variable
+2. Average variables
+3. Principal Component Analysis or other dimension reducuction
+4. For prediction modeling, special methods like penalized regression, Support Vector Machines, ...
+
 # Conclusions
 
 ## Conclusions

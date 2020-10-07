@@ -17,7 +17,7 @@
 1. Brief review of GLMs
 2. Motivating example for log-linear models
 3. Poisson log-linear GLM
-4. Note on collinearity
+4. Note on multicollinearity
 
 Reading: Vittinghoff textbook chapter 8.1-8.3
 
