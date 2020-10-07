@@ -236,8 +236,8 @@ $$
 ## Interpretation of coefficients (cont'd)
 
 * If $\hat \beta_1=-0.5$ with whites as the reference group:
-       - after adjustment for treatment group, alcohol and drug usage, whites tend to use the emergency room at a rate 1.65 times higher than non-whites.
-       - equivalently, the average rate of usage for whites is 65% higher than that for non-whites
+    - after adjustment for treatment group, alcohol and drug usage, whites tend to use the emergency room at a rate 1.65 times higher than non-whites.
+    - equivalently, the average rate of usage for whites is 65% higher than that for non-whites
 * Multiplicative rules apply for other coefficients as well, because they are exponentiated to estimate the mean rate.
 
 # Multi-collinearity
@@ -245,7 +245,7 @@ $$
 ## What is Multicollinearity?
 
 1. *Multicollinearity* exists when two or more of the independent variables in regression are moderately or highly correlated.
-2. Hi correlation among continuous predictors or high concordance among categorical predictors
+2. High correlation among continuous predictors or high concordance among categorical predictors
 3. Impacts the ability to estimate regression coefficients
     + larger standard errors for regression coefficients
     + ie, coefficients are unstable over repeated sampling
