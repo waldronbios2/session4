@@ -537,11 +537,18 @@ log(\lambda_i) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + \b
 \begin{itemize}
 \tightlist
 \item
-  If \(\hat \beta_1=-0.5\) with whites as the reference group: - after
-  adjustment for treatment group, alcohol and drug usage, whites tend to
-  use the emergency room at a rate 1.65 times higher than non-whites. -
-  equivalently, the average rate of usage for whites is 65\% higher than
-  that for non-whites
+  If \(\hat \beta_1=-0.5\) with whites as the reference group:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    after adjustment for treatment group, alcohol and drug usage, whites
+    tend to use the emergency room at a rate 1.65 times higher than
+    non-whites.
+  \item
+    equivalently, the average rate of usage for whites is 65\% higher
+    than that for non-whites
+  \end{itemize}
 \item
   Multiplicative rules apply for other coefficients as well, because
   they are exponentiated to estimate the mean rate.
@@ -561,7 +568,7 @@ log(\lambda_i) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + \b
   \emph{Multicollinearity} exists when two or more of the independent
   variables in regression are moderately or highly correlated.
 \item
-  Hi correlation among continuous predictors or high concordance among
+  High correlation among continuous predictors or high concordance among
   categorical predictors
 \item
   Impacts the ability to estimate regression coefficients
