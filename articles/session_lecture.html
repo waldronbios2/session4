@@ -87,7 +87,7 @@
 
       
 
-      </header><div class="row">
+      </header><script src="session_lecture_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Session 4: loglinear regression part 1</h1>
@@ -112,7 +112,7 @@
 <li>Identify situations that motivate use of log-linear models</li>
 <li>Define the Poisson distribution and the log-linear Poisson GLM</li>
 <li>Identify applications and properties of the Poisson distribution</li>
-<li>Define multi-collinearity</li>
+<li>Define multicollinearity and identify resulting issues</li>
 </ol>
 </div>
 <div id="outline" class="section level2">
@@ -122,14 +122,14 @@
 <li>Brief review of GLMs</li>
 <li>Motivating example for log-linear models</li>
 <li>Poisson log-linear GLM</li>
-<li>Note on collinearity</li>
+<li>Notes on Multicollinearity</li>
 </ol>
 <p>Reading: Vittinghoff textbook chapter 8.1-8.3</p>
 </div>
 </div>
-<div id="review" class="section level1">
+<div id="brief-review-of-glms" class="section level1">
 <h1 class="hasAnchor">
-<a href="#review" class="anchor"></a>Review</h1>
+<a href="#brief-review-of-glms" class="anchor"></a>Brief review of GLMs</h1>
 <div id="components-of-glm" class="section level2">
 <h2 class="hasAnchor">
 <a href="#components-of-glm" class="anchor"></a>Components of GLM</h2>
@@ -171,9 +171,9 @@ P(x) = g^{-1}\left( \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_p x_
 \]</span></p></li>
 </ul>
 </div>
-<div id="additive-vs-multiplicative-models" class="section level2">
+<div id="additive-vs--multiplicative-models" class="section level2">
 <h2 class="hasAnchor">
-<a href="#additive-vs-multiplicative-models" class="anchor"></a>Additive vs. Multiplicative models</h2>
+<a href="#additive-vs--multiplicative-models" class="anchor"></a>Additive vs. Multiplicative models</h2>
 <ul>
 <li>Linear regression is an <em>additive</em> model
 <ul>
@@ -231,6 +231,10 @@ P(x) = g^{-1}\left( \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_p x_
 <li>some subjects die or cannot be followed up on for a whole year</li>
 </ol>
 </div>
+</div>
+<div id="poisson-log-linear-glm" class="section level1">
+<h1 class="hasAnchor">
+<a href="#poisson-log-linear-glm" class="anchor"></a>Poisson log-linear GLM</h1>
 <div id="towards-a-reasonable-model" class="section level2">
 <h2 class="hasAnchor">
 <a href="#towards-a-reasonable-model" class="anchor"></a>Towards a reasonable model</h2>
@@ -296,13 +300,13 @@ log(E[Y_i]) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i +
 <ul>
 <li>Individual events are low-probability (small p), but many opportunities (large n)
 <ul>
-<li>e.g. # 911 calls per day</li>
-<li>e.g. # emergency room visits</li>
+<li>e.g. # 911 calls per day</li>
+<li>e.g. # emergency room visits</li>
 </ul>
 </li>
 <li>Approximates the binomial distribution when n is large and p is small
 <ul>
-<li>e.g. <span class="math inline">\(n &gt; 20\)</span>, <span class="math inline">\(np &lt; 5\)</span> or <span class="math inline">\(n(1-p) &lt; 5\)</span>
+<li>e.g. <span class="math inline">\(n &gt; 20\)</span>, <span class="math inline">\(np &lt; 5\)</span> or <span class="math inline">\(n(1-p) &lt; 5\)</span>
 </li>
 </ul>
 </li>
@@ -360,22 +364,72 @@ log(\lambda_i) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + \b
 </ul>
 </div>
 </div>
-<div id="multicollinearity" class="section level1">
+<div id="multi-collinearity" class="section level1">
 <h1 class="hasAnchor">
-<a href="#multicollinearity" class="anchor"></a>Multicollinearity</h1>
-<div id="note-on-multicollinearity" class="section level2">
+<a href="#multi-collinearity" class="anchor"></a>Multi-collinearity</h1>
+<div id="what-is-multicollinearity" class="section level2">
 <h2 class="hasAnchor">
-<a href="#note-on-multicollinearity" class="anchor"></a>Note on Multicollinearity</h2>
+<a href="#what-is-multicollinearity" class="anchor"></a>What is Multicollinearity?</h2>
 <ol style="list-style-type: decimal">
 <li>
 <em>Multicollinearity</em> exists when two or more of the independent variables in regression are moderately or highly correlated.</li>
-<li>Multicollinearity implies near-linear relationship among the predictors</li>
-<li>The presence of near-linear dependence dramatically impacts the ability to estimate regression coefficients</li>
-<li>High multicollinearity results in larger standard errors for regression coefficients
+<li>Hi correlation among continuous predictors or high concordance among categorical predictors</li>
+<li>Impacts the ability to estimate regression coefficients
 <ul>
-<li>estimates of such regression coefficients will tend to be less stable over repeated sampling</li>
+<li>larger standard errors for regression coefficients</li>
+<li>ie, coefficients are unstable over repeated sampling</li>
+<li>exact collinearity produces infinite standard errors on coefficients</li>
 </ul>
 </li>
+<li>Can also result in unstable (high variance) prediction models</li>
+</ol>
+</div>
+<div id="identifying-multicollinearity" class="section level2">
+<h2 class="hasAnchor">
+<a href="#identifying-multicollinearity" class="anchor"></a>Identifying multicollinearity</h2>
+<ol style="list-style-type: decimal">
+<li>Pairwise correlations of data or of model matrix (latter works with categorical variables)</li>
+<li>Heat maps</li>
+<li>Variance Inflation Factor (VIF) of regression coefficients</li>
+</ol>
+</div>
+<div id="example-us-judge-ratings-dataset" class="section level2">
+<h2 class="hasAnchor">
+<a href="#example-us-judge-ratings-dataset" class="anchor"></a>Example: US Judge Ratings dataset</h2>
+<p>See <code><a href="https://rdrr.io/r/datasets/USJudgeRatings.html">?USJudgeRatings</a></code> for dataset, <code><a href="https://rdrr.io/r/graphics/pairs.html">?pairs</a></code> for plot code: <img src="session_lecture_files/figure-html/unnamed-chunk-2-1.png" width="700"> **Pairwise scatterplot of continuous variables in US Judge Ratings dataset</p>
+</div>
+<div id="example-iris-dataset" class="section level2">
+<h2 class="hasAnchor">
+<a href="#example-iris-dataset" class="anchor"></a>Example: iris dataset</h2>
+<p>One categorical variable, so use model matrix. Make a simple heatmap. </p>
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="va">mm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.matrix.html">model.matrix</a></span><span class="op">(</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
+<span class="fu">pheatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pheatmap/man/pheatmap.html">pheatmap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">mm</span><span class="op">[</span>, <span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>, <span class="co">#-1 gets rid of intercept column</span>
+  color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/colorRamp.html">colorRampPalette</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"#f0f0f0"</span>, <span class="st">"#bdbdbd"</span>, <span class="st">"#636363"</span><span class="op">)</span><span class="op">)</span><span class="op">(</span><span class="fl">100</span><span class="op">)</span><span class="op">)</span></pre></div>
+<p><img src="session_lecture_files/figure-html/unnamed-chunk-3-1.png" width="700"><em>Note:</em> multicollinearity exists between multiple predictors, not between predictor and outcome</p>
+</div>
+<div id="example-iris-dataset-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#example-iris-dataset-1" class="anchor"></a>Example: iris dataset</h2>
+<p>Confirm what in iris dataset using Variance Inflation Factor of a linear regression model: </p>
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
+<span class="fu">car</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/car/man/vif.html">vif</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></pre></div>
+<pre><code>##                   GVIF Df GVIF^(1/(2*Df))
+## Sepal.Length  6.124653  1        2.474804
+## Petal.Length 45.132550  1        6.718076
+## Petal.Width  18.373804  1        4.286468
+## Species      32.701564  2        2.391344</code></pre>
+</div>
+<div id="approaches-for-dealing-with-multicollinearity" class="section level2">
+<h2 class="hasAnchor">
+<a href="#approaches-for-dealing-with-multicollinearity" class="anchor"></a>Approaches for dealing with multicollinearity</h2>
+<p>Options:</p>
+<ol style="list-style-type: decimal">
+<li>Select a representative variable</li>
+<li>Average variables</li>
+<li>Principal Component Analysis or other dimension reducuction</li>
+<li>For prediction modeling, special methods like penalized regression, Support Vector Machines, …</li>
 </ol>
 </div>
 </div>
@@ -423,7 +477,7 @@ log(\lambda_i) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + \b
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
