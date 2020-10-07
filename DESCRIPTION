@@ -9,6 +9,7 @@ Description: Loglinear regression part 1
 Imports:
     tableone,
     pheatmap,
+    car,
     tidyverse
 Suggests:
     pkgdown,
