@@ -113,67 +113,92 @@
 <ol style="list-style-type: decimal">
 <li>Simulate count data from a Poisson distribution (for example number of hospital visits by persons over 70 in a 3-year period), where:
 <ol style="list-style-type: lower-alpha">
-<li>each person is annotated with “race” as “white” or “non-white”</li>
+<li>10,000 persons annotated with “race” as “white” or “non-white”</li>
 <li>“white” persons have an average of 3.5 hospital visits during this time period</li>
 <li>“non-white” persons have an average of 3 hospital visits</li>
 </ol>
 </li>
 </ol>
 <div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="va">simdat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>race<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"white"</span>, <span class="st">"non-white"</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">10000</span>, replace<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
-<span class="va">simdat</span><span class="op">$</span><span class="va">race</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">simdat</span><span class="op">$</span><span class="va">race</span>, levels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"white"</span>, <span class="st">"non-white"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">simdat</span><span class="op">$</span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html">rpois</a></span><span class="op">(</span><span class="fl">10000</span>, lambda<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">simdat</span><span class="op">$</span><span class="va">race</span><span class="op">==</span><span class="st">"white"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fl">3.5</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></pre></div>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></pre></div>
+<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──</code></pre>
+<pre><code>## ✔ ggplot2 3.3.2     ✔ purrr   0.3.4
+## ✔ tibble  3.0.3     ✔ dplyr   1.0.2
+## ✔ tidyr   1.1.2     ✔ stringr 1.4.0
+## ✔ readr   1.4.0     ✔ forcats 0.5.0</code></pre>
+<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()</code></pre>
+<div class="sourceCode" id="cb5"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
+<span class="va">N</span> <span class="op">&lt;-</span> <span class="fl">10000</span>
+<span class="va">simdat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>race <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"white"</span>, <span class="st">"non-white"</span><span class="op">)</span>, <span class="va">N</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">mutate</span><span class="op">(</span>race <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">race</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"white"</span>, <span class="st">"non-white"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">mutate</span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html">rpois</a></span><span class="op">(</span><span class="va">N</span>, lambda <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">race</span> <span class="op">==</span> <span class="st">"white"</span>, <span class="fl">3.5</span>, <span class="fl">3.0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></pre></div>
 <ol start="2" style="list-style-type: decimal">
 <li>Fit a log-linear Poisson model of count outcomes with “race” as covariate</li>
 </ol>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">race</span>, data <span class="op">=</span> <span class="va">simdat</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">poisson</a></span><span class="op">(</span><span class="st">"log"</span><span class="op">)</span><span class="op">)</span>
+<div class="sourceCode" id="cb6"><pre class="downlit">
+<span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">race</span>, data <span class="op">=</span> <span class="va">simdat</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">poisson</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"log"</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></pre></div>
 <pre><code>## 
 ## Call:
-## glm(formula = y ~ race, family = poisson("log"), data = simdat)
+## glm(formula = y ~ race, family = poisson(link = "log"), data = simdat)
 ## 
 ## Deviance Residuals: 
 ##     Min       1Q   Median       3Q      Max  
-## -3.7537  -0.7257  -0.0402   0.6677   3.6210  
+## -2.6483  -0.8760   0.0092   0.5588   3.5410  
 ## 
 ## Coefficients:
 ##                Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept)    3.499100   0.002463  1420.9   &lt;2e-16 ***
-## racenon-white -0.494397   0.003993  -123.8   &lt;2e-16 ***
+## (Intercept)    1.254710   0.007564  165.88   &lt;2e-16 ***
+## racenon-white -0.161428   0.011137  -14.49   &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## (Dispersion parameter for poisson family taken to be 1)
 ## 
-##     Null deviance: 25873  on 9999  degrees of freedom
-## Residual deviance: 10079  on 9998  degrees of freedom
-## AIC: 60834
+##     Null deviance: 11041  on 9999  degrees of freedom
+## Residual deviance: 10831  on 9998  degrees of freedom
+## AIC: 39419
 ## 
-## Number of Fisher Scoring iterations: 4</code></pre>
+## Number of Fisher Scoring iterations: 5</code></pre>
 <ol start="3" style="list-style-type: decimal">
 <li>Use a chi-square test on deviance residuals to test null hypothesis of no relationship between mean hospital visits and race.</li>
 </ol>
 <ul>
 <li>The difference in total deviance between two nested models is <span class="math inline">\(\chi^2\)</span> distributed under <span class="math inline">\(H_0\)</span> that the more complex model is no better at explaining the response.
 <ul>
-<li>The difference in deviance residuals is (26157 - 10111) = 16046, with a difference of 1 degrees of freedom.</li>
+<li>The difference in deviance residuals is (11041 - 10831) = 210, with a difference of 1 degrees of freedom.</li>
 </ul>
 </li>
 </ul>
 <p>The critical threshold for rejection at p=0.05 is:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
+<div class="sourceCode" id="cb8"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/stats/Chisquare.html">qchisq</a></span><span class="op">(</span><span class="fl">0.95</span>, df<span class="op">=</span><span class="fl">1</span><span class="op">)</span></pre></div>
 <pre><code>## [1] 3.841459</code></pre>
 <p>So we reject <span class="math inline">\(H_0\)</span></p>
+<p>BEWARE OF MISSING DATA: THIS IS SAFER</p>
+<div class="sourceCode" id="cb10"><pre class="downlit">
+<span class="va">fit0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="op">-</span><span class="fl">1</span>, data <span class="op">=</span> <span class="va">simdat</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">poisson</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"log"</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/stats/anova.html">anova</a></span><span class="op">(</span><span class="va">fit0</span>, <span class="va">fit</span>, test <span class="op">=</span> <span class="st">"LRT"</span><span class="op">)</span></pre></div>
+<pre><code>## Analysis of Deviance Table
+## 
+## Model 1: y ~ -1
+## Model 2: y ~ race
+##   Resid. Df Resid. Dev Df Deviance  Pr(&gt;Chi)    
+## 1     10000      42527                          
+## 2      9998      10831  2    31696 &lt; 2.2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <ol start="3" style="list-style-type: decimal">
 <li>Inference on deviance residuals 2</li>
 </ol>
 <p>Total residual deviance is <span class="math inline">\(\chi^2\)</span> distributed if the model is correctly specified + What is the critical value for rejecting <span class="math inline">\(H_0\)</span> at <span class="math inline">\(p &lt; 0.05\)</span> with a <span class="math inline">\(\chi^2\)</span> distribution of 9998 degrees of freedom?</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
+<div class="sourceCode" id="cb12"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/stats/Chisquare.html">qchisq</a></span><span class="op">(</span><span class="fl">0.95</span>, df<span class="op">=</span><span class="fl">9998</span><span class="op">)</span></pre></div>
 <pre><code>## [1] 10231.73</code></pre>
-<p>Here total residual deviance is 10111, so we do <em>not</em> exceed the threshold and do not reject <span class="math inline">\(H_0\)</span> that the model is correctly specified.</p>
+<p>Here total residual deviance is 10811, so we do <em>not</em> exceed the threshold and do not reject <span class="math inline">\(H_0\)</span> that the model is correctly specified.</p>
 <ol start="4" style="list-style-type: decimal">
 <li>Create and discuss standard fit diagnostics plots</li>
 </ol>
@@ -186,7 +211,7 @@
 <li>Outcome is # times the drug user shared a syringe in the past month (<code>shared_syr</code>)</li>
 <li>Predictors: sex, ethn, homeless</li>
 </ul>
-<div class="sourceCode" id="cb8"><pre class="downlit">
+<div class="sourceCode" id="cb14"><pre class="downlit">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org">readr</a></span><span class="op">)</span>
 <span class="va">needledat</span> <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">"needle_sharing.csv"</span><span class="op">)</span></pre></div>
 <pre><code>## 
@@ -210,15 +235,15 @@
 ##   homeless = col_double(),
 ##   shsyr = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb10"><pre class="downlit">
+<div class="sourceCode" id="cb16"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">needledat</span><span class="op">$</span><span class="va">shared_syr</span><span class="op">)</span></pre></div>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
 ##   0.000   0.000   0.000   2.976   0.000  60.000       5</code></pre>
-<div class="sourceCode" id="cb12"><pre class="downlit">
+<div class="sourceCode" id="cb18"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">needledat</span><span class="op">$</span><span class="va">shared_syr</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></pre></div>
 <pre><code>## [1] 106.5978</code></pre>
 <p>Some recoding:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit">
+<div class="sourceCode" id="cb20"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span><span class="op">)</span>
 <span class="va">needledat_cleaned</span> <span class="op">&lt;-</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="va">needledat</span>,
@@ -230,7 +255,7 @@
 <ol start="5" style="list-style-type: decimal">
 <li>Create a table of the risky drug use behavior dataset</li>
 </ol>
-<div class="sourceCode" id="cb15"><pre class="downlit">
+<div class="sourceCode" id="cb21"><pre class="downlit">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/kaz-yos/tableone">tableone</a></span><span class="op">)</span>
 <span class="va">t1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/tableone/man/CreateTableOne.html">CreateTableOne</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">needledat_cleaned</span>, includeNA <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">t1</span>, missing<span class="op">=</span><span class="cn">TRUE</span>, showAllLevels <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></pre></div>
@@ -259,7 +284,7 @@
 <li><p>Create a histogram number of syringe uses</p></li>
 <li><p>Create a scatter plot of number of syringe uses versus rank of number of syringe uses</p></li>
 </ol>
-<div class="sourceCode" id="cb17"><pre class="downlit">
+<div class="sourceCode" id="cb23"><pre class="downlit">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">needledat</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">shared_syr</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
@@ -269,7 +294,7 @@
 <pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
 <pre><code>## Warning: Removed 5 rows containing non-finite values (stat_bin).</code></pre>
 <p><img src="session_lab_files/figure-html/histogram-1.png" width="700"></p>
-<div class="sourceCode" id="cb20"><pre class="downlit">
+<div class="sourceCode" id="cb26"><pre class="downlit">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="va">needledat</span>, rnk <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rank.html">rank</a></span><span class="op">(</span><span class="va">shared_syr</span>, ties.method <span class="op">=</span> <span class="st">"first"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">rnk</span>, y <span class="op">=</span> <span class="va">shared_syr</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
@@ -285,7 +310,8 @@
 <ol start="8" style="list-style-type: decimal">
 <li>Fit a Poisson model to the risky drug use behavior dataset anyways</li>
 </ol>
-<div class="sourceCode" id="cb22"><pre class="downlit">
+<p>Even though we know it is a bad fit</p>
+<div class="sourceCode" id="cb28"><pre class="downlit">
 <span class="va">fit.pois</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">shared_syr</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">ethn</span> <span class="op">+</span> <span class="va">homeless</span>,
                 data <span class="op">=</span> <span class="va">needledat</span>,
                 family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">poisson</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"log"</span><span class="op">)</span><span class="op">)</span>
@@ -325,7 +351,7 @@
 <ol start="9" style="list-style-type: decimal">
 <li>Create and discuss Poisson model diagnostic plots</li>
 </ol>
-<div class="sourceCode" id="cb24"><pre class="downlit">
+<div class="sourceCode" id="cb30"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit.pois</span><span class="op">)</span></pre></div>
 <pre><code>## Warning: not plotting observations with leverage one:
