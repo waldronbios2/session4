@@ -72,24 +72,14 @@ fit0 <- glm(y ~ -1, data = simdat, family = poisson(link = "log"))
 anova(fit0, fit, test = "LRT")
 ```
 
-3. Inference on deviance residuals 2
-
-Total residual deviance is $\chi^2$ distributed if the model is correctly specified
-     + What is the critical value for rejecting $H_0$ at $p < 0.05$ with a $\chi^2$ distribution of 9998 degrees of freedom?
-```{r}
-qchisq(0.95, df=9998)
-```
-
-Here total residual deviance is 10811, so we do *not* exceed the threshold and do not reject $H_0$ that the model is correctly specified.
-
-4. Create and discuss standard fit diagnostics plots
+3. Create and discuss standard fit diagnostics plots
 
 ```{r, echo=FALSE}
 par(mfrow = c(2, 2))
 plot(fit)
 ```
 
-5. Example: Risky Drug Use Behavior
+4. Example: Risky Drug Use Behavior
 
 * Download the "needle_sharing" dataset (see Vittinghoff 8.3.1)
 * Outcome is # times the drug user shared a syringe in the past month (`shared_syr`)
@@ -149,7 +139,7 @@ mutate(needledat, rnk = rank(shared_syr, ties.method = "first")) %>%
 
 * There are a _lot_ of zeros - Poisson model is not a good fit
 
-8. Fit a Poisson model to the risky drug use behavior dataset anyways
+7. Fit a Poisson model to the risky drug use behavior dataset anyways
 
 Even though we know it is a bad fit
 
@@ -160,7 +150,7 @@ fit.pois <- glm(shared_syr ~ sex + ethn + homeless,
 summary(fit.pois)
 ```
 
-9. Create and discuss Poisson model diagnostic plots
+8. Create and discuss Poisson model diagnostic plots
 
 ```{r diagnostic}
 par(mfrow = c(2, 2))
