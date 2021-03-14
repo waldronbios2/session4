@@ -45,7 +45,7 @@ simdat <- data.frame(race = sample(c("white", "non-white"), N, replace = TRUE)) 
 
 
 
-2. Fit a log-linear Poisson model of count outcomes with "race" as covariate
+2. Fit a log-linear Poisson model of count outcomes with "race" as the predictor. Note, in this context I tend to use the terms "predictor" and "covariate" interchangeably, to mean any variable used as a predictor in the regression model.
 
 ```{r}
 fit <- glm(y ~ race, data = simdat, family = poisson(link = "log"))
