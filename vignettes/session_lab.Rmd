@@ -86,8 +86,8 @@ plot(fit)
 * Predictors: sex, ethn, homeless
 
 ```{r loaddata}
-library(readr)
-needledat = read_csv("needle_sharing.csv")
+library(readxl)
+needledat <- read_excel("needle_sharing.xlsx")
 summary(needledat$shared_syr)
 var(needledat$shared_syr, na.rm=TRUE)
 ```
@@ -106,10 +106,9 @@ needledat_cleaned <-
 
 5. Create a table of the risky drug use behavior dataset
 
-```{r tableone}
-library(tableone)
-t1 <- CreateTableOne(data=needledat_cleaned, includeNA = TRUE)
-print(t1, missing=TRUE, showAllLevels = TRUE)
+```{r table1}
+library(table1)
+table1(~ ., data = needledat_cleaned)
 ```
 
 6. Plots of Risky Drug Use Behavior
