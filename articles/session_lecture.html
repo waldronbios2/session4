@@ -25,6 +25,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -37,14 +39,14 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">session4</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Lecture and Lab
      
     <span class="caret"></span>
@@ -57,23 +59,23 @@
       <a href="../articles/session_lecture.pdf">Lecture notes PDF</a>
     </li>
     <li class="divider">
-    <li>
+    </li>
+<li>
       <a href="../articles/session_lab.html">Lab materials</a>
     </li>
   </ul>
 </li>
-<li class="dropdown-header">
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/waldronbios2/session4/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+  <a href="https://github.com/waldronbios2/session4/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="https://twitter.com/leviwaldron1">
-    <span class="fab fa fab fa-twitter fa-lg"></span>
+  <a href="https://twitter.com/leviwaldron1" class="external-link">
+    <span class="fab fa-twitter fa-lg"></span>
      
   </a>
 </li>
@@ -87,37 +89,39 @@
 
       
 
-      </header><script src="session_lecture_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Session 4: loglinear regression part 1</h1>
-                        <h4 class="author">Levi Waldron</h4>
+                        <h4 data-toc-skip class="author">Levi
+Waldron</h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/waldronbios2/session4/blob/master/vignettes/session_lecture.Rmd"><code>vignettes/session_lecture.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/waldronbios2/session4/blob/HEAD/vignettes/session_lecture.Rmd" class="external-link"><code>vignettes/session_lecture.Rmd</code></a></small>
       <div class="hidden name"><code>session_lecture.Rmd</code></div>
 
     </div>
 
     
     
-<div id="learning-objectives-and-outline" class="section level1">
-<h1 class="hasAnchor">
-<a href="#learning-objectives-and-outline" class="anchor"></a>Learning objectives and outline</h1>
-<div id="learning-objectives" class="section level2">
-<h2 class="hasAnchor">
-<a href="#learning-objectives" class="anchor"></a>Learning objectives</h2>
+<div class="section level2">
+<h2 id="learning-objectives-and-outline">Learning objectives and outline<a class="anchor" aria-label="anchor" href="#learning-objectives-and-outline"></a>
+</h2>
+<div class="section level3">
+<h3 id="learning-objectives">Learning objectives<a class="anchor" aria-label="anchor" href="#learning-objectives"></a>
+</h3>
 <ol style="list-style-type: decimal">
 <li>Define log-linear models in GLM framework</li>
 <li>Identify situations that motivate use of log-linear models</li>
 <li>Define the Poisson distribution and the log-linear Poisson GLM</li>
-<li>Identify applications and properties of the Poisson distribution</li>
+<li>Identify applications and properties of the Poisson
+distribution</li>
 <li>Define multicollinearity and identify resulting issues</li>
 </ol>
 </div>
-<div id="outline" class="section level2">
-<h2 class="hasAnchor">
-<a href="#outline" class="anchor"></a>Outline</h2>
+<div class="section level3">
+<h3 id="outline">Outline<a class="anchor" aria-label="anchor" href="#outline"></a>
+</h3>
 <ol style="list-style-type: decimal">
 <li>Brief review of GLMs</li>
 <li>Motivating example for log-linear models</li>
@@ -127,53 +131,69 @@
 <p>Reading: Vittinghoff textbook chapter 8.1-8.3</p>
 </div>
 </div>
-<div id="brief-review-of-glms" class="section level1">
-<h1 class="hasAnchor">
-<a href="#brief-review-of-glms" class="anchor"></a>Brief review of GLMs</h1>
-<div id="components-of-glm" class="section level2">
-<h2 class="hasAnchor">
-<a href="#components-of-glm" class="anchor"></a>Components of GLM</h2>
+<div class="section level2">
+<h2 id="brief-review-of-glms">Brief review of GLMs<a class="anchor" aria-label="anchor" href="#brief-review-of-glms"></a>
+</h2>
+<div class="section level3">
+<h3 id="components-of-glm">Components of GLM<a class="anchor" aria-label="anchor" href="#components-of-glm"></a>
+</h3>
 <ul>
 <li>
-<strong>Random component</strong> specifies the conditional distribution for the response variable - it doesn’t have to be normal but can be any distribution that belongs to the “exponential” family of distributions</li>
+<strong>Random component</strong> specifies the conditional
+distribution for the response variable - it doesn’t have to be normal
+but can be any distribution that belongs to the “exponential” family of
+distributions</li>
 <li>
-<strong>Systematic component</strong> specifies linear function of predictors (linear predictor)</li>
+<strong>Systematic component</strong> specifies linear function of
+predictors (linear predictor)</li>
 <li>
-<strong>Link</strong> [denoted by g(.)] specifies the relationship between the expected value of the random component and the systematic component, can be linear or nonlinear</li>
+<strong>Link</strong> [denoted by g(.)] specifies the relationship
+between the expected value of the random component and the systematic
+component, can be linear or nonlinear</li>
 </ul>
 </div>
-<div id="linear-regression-as-glm" class="section level2">
-<h2 class="hasAnchor">
-<a href="#linear-regression-as-glm" class="anchor"></a>Linear Regression as GLM</h2>
+<div class="section level3">
+<h3 id="linear-regression-as-glm">Linear Regression as GLM<a class="anchor" aria-label="anchor" href="#linear-regression-as-glm"></a>
+</h3>
 <ul>
-<li><p><strong>The model</strong>: <span class="math inline">\(y_i = E[y|x] + \epsilon_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_p x_{pi} + \epsilon_i\)</span></p></li>
-<li><p><strong>Random component</strong> of <span class="math inline">\(y_i\)</span> is normally distributed: <span class="math inline">\(\epsilon_i \stackrel{iid}{\sim} N(0, \sigma_\epsilon^2)\)</span></p></li>
-<li><p><strong>Systematic component</strong> (linear predictor): <span class="math inline">\(\beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_p x_{pi}\)</span></p></li>
-<li><p><strong>Link function</strong> here is the <em>identity link</em>: <span class="math inline">\(g(E(y | x)) = E(y | x)\)</span>. We are modeling the mean directly, no transformation.</p></li>
+<li><p><strong>The model</strong>: <span class="math inline">\(y_i =
+E[y|x] + \epsilon_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... +
+\beta_p x_{pi} + \epsilon_i\)</span></p></li>
+<li><p><strong>Random component</strong> of <span class="math inline">\(y_i\)</span> is normally distributed: <span class="math inline">\(\epsilon_i \stackrel{iid}{\sim} N(0,
+\sigma_\epsilon^2)\)</span></p></li>
+<li><p><strong>Systematic component</strong> (linear predictor): <span class="math inline">\(\beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... +
+\beta_p x_{pi}\)</span></p></li>
+<li><p><strong>Link function</strong> here is the <em>identity
+link</em>: <span class="math inline">\(g(E(y | x)) = E(y | x)\)</span>.
+We are modeling the mean directly, no transformation.</p></li>
 </ul>
 </div>
-<div id="logistic-regression-as-glm" class="section level2">
-<h2 class="hasAnchor">
-<a href="#logistic-regression-as-glm" class="anchor"></a>Logistic Regression as GLM</h2>
+<div class="section level3">
+<h3 id="logistic-regression-as-glm">Logistic Regression as GLM<a class="anchor" aria-label="anchor" href="#logistic-regression-as-glm"></a>
+</h3>
 <ul>
 <li><p><strong>The model</strong>: <span class="math display">\[
-Logit(P(x)) = log \left( \frac{P(x)}{1-P(x)} \right) = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_p x_{pi}
+Logit(P(x)) = log \left( \frac{P(x)}{1-P(x)} \right) = \beta_0 + \beta_1
+x_{1i} + \beta_2 x_{2i} + ... + \beta_p x_{pi}
 \]</span></p></li>
-<li><p><strong>Random component</strong>: <span class="math inline">\(y_i\)</span> follows a Binomial distribution (outcome is a binary variable)</p></li>
+<li><p><strong>Random component</strong>: <span class="math inline">\(y_i\)</span> follows a Binomial distribution
+(outcome is a binary variable)</p></li>
 <li><p><strong>Systematic component</strong>: linear predictor <span class="math display">\[
 \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_p x_{pi}
 \]</span></p></li>
-<li><p><strong>Link function</strong>: <em>logit</em> (Converts Prob -&gt; log-odds) <span class="math display">\[
+<li><p><strong>Link function</strong>: <em>logit</em> (Converts Prob
+-&gt; log-odds) <span class="math display">\[
 g(P(x)) = logit(P(x)) = log\left( \frac{P(x)}{1-P(x)} \right)
 \]</span> <span class="math display">\[
-P(x) = g^{-1}\left( \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_p x_{pi}
- \right)
+P(x) = g^{-1}\left( \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... +
+\beta_p x_{pi}
+\right)
 \]</span></p></li>
 </ul>
 </div>
-<div id="additive-vs--multiplicative-models" class="section level2">
-<h2 class="hasAnchor">
-<a href="#additive-vs--multiplicative-models" class="anchor"></a>Additive vs. Multiplicative models</h2>
+<div class="section level3">
+<h3 id="additive-vs--multiplicative-models">Additive vs. Multiplicative models<a class="anchor" aria-label="anchor" href="#additive-vs--multiplicative-models"></a>
+</h3>
 <ul>
 <li>Linear regression is an <em>additive</em> model
 <ul>
@@ -187,23 +207,27 @@ P(x) = g^{-1}\left( \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_p x_
 <ul>
 <li>If <span class="math inline">\(x_1=1\)</span> and <span class="math inline">\(x_2=1\)</span>, this adds 3.0 to <span class="math inline">\(log(\frac{P}{1-P})\)</span>
 </li>
-<li>Odds-ratio <span class="math inline">\(\frac{P}{1-P}\)</span> increases 20-fold: <span class="math inline">\(exp(1.5+1.5)\)</span> or <span class="math inline">\(exp(1.5) * exp(1.5)\)</span>
+<li>Odds-ratio <span class="math inline">\(\frac{P}{1-P}\)</span>
+increases 20-fold: <span class="math inline">\(exp(1.5+1.5)\)</span> or
+<span class="math inline">\(exp(1.5) * exp(1.5)\)</span>
 </li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div id="motivating-example-for-log-linear-models" class="section level1">
-<h1 class="hasAnchor">
-<a href="#motivating-example-for-log-linear-models" class="anchor"></a>Motivating example for log-linear models</h1>
-<div id="effectiveness-of-a-depression-case-management-program" class="section level2">
-<h2 class="hasAnchor">
-<a href="#effectiveness-of-a-depression-case-management-program" class="anchor"></a>Effectiveness of a depression case-management program</h2>
+<div class="section level2">
+<h2 id="motivating-example-for-log-linear-models">Motivating example for log-linear models<a class="anchor" aria-label="anchor" href="#motivating-example-for-log-linear-models"></a>
+</h2>
+<div class="section level3">
+<h3 id="effectiveness-of-a-depression-case-management-program">Effectiveness of a depression case-management program<a class="anchor" aria-label="anchor" href="#effectiveness-of-a-depression-case-management-program"></a>
+</h3>
 <ul>
-<li>Research question: can a new treatment reduce the number of needed visits to the emergency room, compared to standard care?</li>
+<li>Research question: can a new treatment reduce the number of needed
+visits to the emergency room, compared to standard care?</li>
 <li>
-<em>outcome</em>: # of emergency room visits for each patient in the year following initial treatment</li>
+<em>outcome</em>: # of emergency room visits for each patient in the
+year following initial treatment</li>
 <li>
 <em>predictors</em>:
 <ul>
@@ -219,92 +243,115 @@ P(x) = g^{-1}\left( \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_p x_
 </li>
 </ul>
 </div>
-<div id="statistical-issues" class="section level2">
-<h2 class="hasAnchor">
-<a href="#statistical-issues" class="anchor"></a>Statistical issues</h2>
+<div class="section level3">
+<h3 id="statistical-issues">Statistical issues<a class="anchor" aria-label="anchor" href="#statistical-issues"></a>
+</h3>
 <ol style="list-style-type: decimal">
-<li>about 1/3 of observations are exactly 0 (did not return to the emergency room within the year)</li>
-<li>highly nonnormal and cannot be transformed to be approximately normal</li>
-<li>even <span class="math inline">\(log(y_i + 1)\)</span> transformation will have a “lump” at zero + over 1/2 the transformed data would have values of 0 or <span class="math inline">\(log(2)\)</span>
+<li>about 1/3 of observations are exactly 0 (did not return to the
+emergency room within the year)</li>
+<li>highly nonnormal and cannot be transformed to be approximately
+normal</li>
+<li>even <span class="math inline">\(log(y_i + 1)\)</span>
+transformation will have a “lump” at zero + over 1/2 the transformed
+data would have values of 0 or <span class="math inline">\(log(2)\)</span>
 </li>
-<li>a linear regression model would give negative predictions for some covariate combinations</li>
+<li>a linear regression model would give negative predictions for some
+covariate combinations</li>
 <li>some subjects die or cannot be followed up on for a whole year</li>
 </ol>
 </div>
 </div>
-<div id="poisson-log-linear-glm" class="section level1">
-<h1 class="hasAnchor">
-<a href="#poisson-log-linear-glm" class="anchor"></a>Poisson log-linear GLM</h1>
-<div id="towards-a-reasonable-model" class="section level2">
-<h2 class="hasAnchor">
-<a href="#towards-a-reasonable-model" class="anchor"></a>Towards a reasonable model</h2>
+<div class="section level2">
+<h2 id="poisson-log-linear-glm">Poisson log-linear GLM<a class="anchor" aria-label="anchor" href="#poisson-log-linear-glm"></a>
+</h2>
+<div class="section level3">
+<h3 id="towards-a-reasonable-model">Towards a reasonable model<a class="anchor" aria-label="anchor" href="#towards-a-reasonable-model"></a>
+</h3>
 <ul>
-<li>A <em>multiplicative</em> model will allow us to make inference on <em>ratios</em> of mean emergency room usage</li>
-<li>Modeling <span class="math inline">\(log\)</span> of the <em>mean</em> emergency usage ensures positive means, and does not suffer from <span class="math inline">\(log(0)\)</span> problem</li>
-<li>Random component of GLM, or residuals (was <span class="math inline">\(\epsilon_i \stackrel{iid}{\sim} N(0, \sigma_\epsilon^2)\)</span> for linear regression) may still not be normal, but we can choose from other distributions</li>
+<li>A <em>multiplicative</em> model will allow us to make inference on
+<em>ratios</em> of mean emergency room usage</li>
+<li>Modeling <span class="math inline">\(log\)</span> of the
+<em>mean</em> emergency usage ensures positive means, and does not
+suffer from <span class="math inline">\(log(0)\)</span> problem</li>
+<li>Random component of GLM, or residuals (was <span class="math inline">\(\epsilon_i \stackrel{iid}{\sim} N(0,
+\sigma_\epsilon^2)\)</span> for linear regression) may still not be
+normal, but we can choose from other distributions</li>
 </ul>
 </div>
-<div id="proposed-model-without-time" class="section level2">
-<h2 class="hasAnchor">
-<a href="#proposed-model-without-time" class="anchor"></a>Proposed model without time</h2>
+<div class="section level3">
+<h3 id="proposed-model-without-time">Proposed model without time<a class="anchor" aria-label="anchor" href="#proposed-model-without-time"></a>
+</h3>
 <p><span class="math display">\[
-log(E[Y_i]) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + \beta_3 \textrm{ALCH}_i + \beta_4 \textrm{DRUG}_i
+log(E[Y_i]) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i
++ \beta_3 \textrm{ALCH}_i + \beta_4 \textrm{DRUG}_i
 \]</span> Or equivalently: <span class="math display">\[
-E[Y_i] = exp \left( \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + \beta_3 \textrm{ALCH}_i + \beta_4 \textrm{DRUG}_i \right)
-\]</span> where <span class="math inline">\(E[Y_i]\)</span> is the expected number of emergency room visits for patient <em>i</em>.</p>
+E[Y_i] = exp \left( \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2
+\textrm{TRT}_i + \beta_3 \textrm{ALCH}_i + \beta_4 \textrm{DRUG}_i
+\right)
+\]</span> where <span class="math inline">\(E[Y_i]\)</span> is the
+expected number of emergency room visits for patient <em>i</em>.</p>
 <ul>
-<li>Important note: Modeling <span class="math inline">\(log(E[Y_i])\)</span> is <em>not</em> equivalent to modeling <span class="math inline">\(E(log(Y_i))\)</span>
+<li>Important note: Modeling <span class="math inline">\(log(E[Y_i])\)</span> is <em>not</em> equivalent to
+modeling <span class="math inline">\(E(log(Y_i))\)</span>
 </li>
 </ul>
 </div>
-<div id="accounting-for-follow-up-time" class="section level2">
-<h2 class="hasAnchor">
-<a href="#accounting-for-follow-up-time" class="anchor"></a>Accounting for follow-up time</h2>
+<div class="section level3">
+<h3 id="accounting-for-follow-up-time">Accounting for follow-up time<a class="anchor" aria-label="anchor" href="#accounting-for-follow-up-time"></a>
+</h3>
 <p>Instead, model mean count per unit time: <span class="math display">\[
 \begin{aligned}
-log(E[Y_i]/t_i) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + 
+log(E[Y_i]/t_i) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2
+\textrm{TRT}_i +
 \beta_3 \textrm{ALCH}_i + \nonumber \\ \beta_4 \textrm{DRUG}_i
 \end{aligned}
 \]</span></p>
 <p>Or equivalently: <span class="math display">\[
 \begin{aligned}
-log(E[Y_i]) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + 
-\beta_3 \textrm{ALCH}_i + \nonumber \\ \beta_4 \textrm{DRUG}_i + log(t_i)
+log(E[Y_i]) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i
++
+\beta_3 \textrm{ALCH}_i + \nonumber \\ \beta_4 \textrm{DRUG}_i +
+log(t_i)
 \end{aligned}
 \]</span></p>
 <ul>
 <li>
-<span class="math inline">\(log(t_i)\)</span> is not a covariate, it is called an <em>offset</em>
+<span class="math inline">\(log(t_i)\)</span> is not a covariate, it
+is called an <em>offset</em>
 </li>
 </ul>
 </div>
-<div id="the-poisson-distribution" class="section level2">
-<h2 class="hasAnchor">
-<a href="#the-poisson-distribution" class="anchor"></a>The Poisson distribution</h2>
+<div class="section level3">
+<h3 id="the-poisson-distribution">The Poisson distribution<a class="anchor" aria-label="anchor" href="#the-poisson-distribution"></a>
+</h3>
 <ul>
 <li>Count data are often modeled as Poisson distributed:
 <ul>
-<li>mean <span class="math inline">\(\lambda\)</span> is greater than 0</li>
+<li>mean <span class="math inline">\(\lambda\)</span> is greater than
+0</li>
 <li>variance is also <span class="math inline">\(\lambda\)</span>
 </li>
-<li>Probability density <span class="math inline">\(P(k, \lambda) = \frac{\lambda^k}{k!} e^{-\lambda}\)</span>
+<li>Probability density <span class="math inline">\(P(k, \lambda) =
+\frac{\lambda^k}{k!} e^{-\lambda}\)</span>
 </li>
 </ul>
 </li>
 </ul>
 <p><img src="session_lecture_files/figure-html/unnamed-chunk-1-1.png" width="700"></p>
 </div>
-<div id="when-the-poisson-distribution-works" class="section level2">
-<h2 class="hasAnchor">
-<a href="#when-the-poisson-distribution-works" class="anchor"></a>When the Poisson distribution works</h2>
+<div class="section level3">
+<h3 id="when-the-poisson-distribution-works">When the Poisson distribution works<a class="anchor" aria-label="anchor" href="#when-the-poisson-distribution-works"></a>
+</h3>
 <ul>
-<li>Individual events are low-probability (small p), but many opportunities (large n)
+<li>Individual events are low-probability (small p), but many
+opportunities (large n)
 <ul>
 <li>e.g. # 911 calls per day</li>
 <li>e.g. # emergency room visits</li>
 </ul>
 </li>
-<li>Approximates the binomial distribution when n is large and p is small
+<li>Approximates the binomial distribution when n is large and p is
+small
 <ul>
 <li>e.g. <span class="math inline">\(n &gt; 20\)</span>, <span class="math inline">\(np &lt; 5\)</span> or <span class="math inline">\(n(1-p) &lt; 5\)</span>
 </li>
@@ -313,149 +360,318 @@ log(E[Y_i]) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i +
 <li>When mean of residuals is approx. equal to variance</li>
 </ul>
 </div>
-<div id="glm-with-log-linear-link-and-poisson-error-model" class="section level2">
-<h2 class="hasAnchor">
-<a href="#glm-with-log-linear-link-and-poisson-error-model" class="anchor"></a>GLM with log-linear link and Poisson error model</h2>
+<div class="section level3">
+<h3 id="glm-with-log-linear-link-and-poisson-error-model">GLM with log-linear link and Poisson error model<a class="anchor" aria-label="anchor" href="#glm-with-log-linear-link-and-poisson-error-model"></a>
+</h3>
 <ul>
-<li>Model the number of counts per unit time as Poisson-distributed + so the expected number of counts per time is <span class="math inline">\(\lambda_i\)</span>
+<li>Model the number of counts per unit time as Poisson-distributed + so
+the expected number of counts per time is <span class="math inline">\(\lambda_i\)</span>
 </li>
 </ul>
-<p><span class="math inline">\(E[Y_i]/t_i = \lambda_i\)</span>  <span class="math inline">\(log(E[Y_i]/t_i) = log(\lambda_i)\)</span>  <span class="math inline">\(log(E[Y_i]) = log(\lambda_i) + log(t_i)\)</span> </p>
+<p><span class="math inline">\(E[Y_i]/t_i = \lambda_i\)</span> <span class="math inline">\(log(E[Y_i]/t_i) = log(\lambda_i)\)</span> <span class="math inline">\(log(E[Y_i]) = log(\lambda_i) + log(t_i)\)</span>
+</p>
 <p>Recalling the log-linear model systematic component: <span class="math display">\[
 \begin{aligned}
-log(E[Y_i]) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + 
-\beta_3 \textrm{ALCH}_i + \nonumber \\ \beta_4 \textrm{DRUG}_i + log(t_i)
+log(E[Y_i]) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i
++
+\beta_3 \textrm{ALCH}_i + \nonumber \\ \beta_4 \textrm{DRUG}_i +
+log(t_i)
 \end{aligned}
 \]</span></p>
 </div>
-<div id="glm-with-log-linear-link-and-poisson-error-model-contd" class="section level2">
-<h2 class="hasAnchor">
-<a href="#glm-with-log-linear-link-and-poisson-error-model-contd" class="anchor"></a>GLM with log-linear link and Poisson error model (cont’d)</h2>
+<div class="section level3">
+<h3 id="glm-with-log-linear-link-and-poisson-error-model-contd">GLM with log-linear link and Poisson error model (cont’d)<a class="anchor" aria-label="anchor" href="#glm-with-log-linear-link-and-poisson-error-model-contd"></a>
+</h3>
 <p>Then the systematic part of the GLM is: <span class="math display">\[
-log(\lambda_i) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + \beta_3 \textrm{ALCH}_i + \beta_4 \textrm{DRUG}_i
+log(\lambda_i) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2
+\textrm{TRT}_i + \beta_3 \textrm{ALCH}_i + \beta_4 \textrm{DRUG}_i
 \]</span> Or alternatively: <span class="math display">\[
-\lambda_i = exp \left( \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + \beta_3 \textrm{ALCH}_i + \beta_4 \textrm{DRUG}_i \right)
+\lambda_i = exp \left( \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2
+\textrm{TRT}_i + \beta_3 \textrm{ALCH}_i + \beta_4 \textrm{DRUG}_i
+\right)
 \]</span></p>
 </div>
-<div id="interpretation-of-coefficients" class="section level2">
-<h2 class="hasAnchor">
-<a href="#interpretation-of-coefficients" class="anchor"></a>Interpretation of coefficients</h2>
+<div class="section level3">
+<h3 id="interpretation-of-coefficients">Interpretation of coefficients<a class="anchor" aria-label="anchor" href="#interpretation-of-coefficients"></a>
+</h3>
 <ul>
-<li>Suppose that <span class="math inline">\(\hat \beta_1 = -0.5\)</span> in the fitted model, where <span class="math inline">\(\textrm{RACE}_i=0\)</span> for white and <span class="math inline">\(\textrm{RACE}_i=1\)</span> for non-white.</li>
-<li>The mean rate of emergency room visits per unit time for white relative to non-white, all else held equal, is estimated to be:</li>
+<li>Suppose that <span class="math inline">\(\hat \beta_1 =
+-0.5\)</span> in the fitted model, where <span class="math inline">\(\textrm{RACE}_i=0\)</span> for white and <span class="math inline">\(\textrm{RACE}_i=1\)</span> for non-white.</li>
+<li>The mean rate of emergency room visits per unit time for white
+relative to non-white, all else held equal, is estimated to be:</li>
 </ul>
 <p><span class="math display">\[
-\frac{exp \left( \beta_0 + 0 + \beta_2 \textrm{TRT}_i + \beta_3 \textrm{ALCH}_i + \beta_4 \textrm{DRUG}_i \right)}{exp \left( \beta_0 - 0.5 + \beta_2 \textrm{TRT}_i + \beta_3 \textrm{ALCH}_i + \beta_4 \textrm{DRUG}_i \right)}
+\frac{exp \left( \beta_0 + 0 + \beta_2 \textrm{TRT}_i + \beta_3
+\textrm{ALCH}_i + \beta_4 \textrm{DRUG}_i \right)}{exp \left( \beta_0 -
+0.5 + \beta_2 \textrm{TRT}_i + \beta_3 \textrm{ALCH}_i + \beta_4
+\textrm{DRUG}_i \right)}
 \]</span> <span class="math display">\[
-= \frac{e^{\beta_0} e^0 e^{\beta_2 \textrm{TRT}_i} e^{\beta_3 \textrm{ALCH}_i} e^{\beta_4 \textrm{DRUG}_i}}
-{e^{\beta_0} e^{-0.5} e^{\beta_2 \textrm{TRT}_i} e^{\beta_3 \textrm{ALCH}_i} e^{\beta_4 \textrm{DRUG}_i}}
+= \frac{e^{\beta_0} e^0 e^{\beta_2 \textrm{TRT}_i} e^{\beta_3
+\textrm{ALCH}_i} e^{\beta_4 \textrm{DRUG}_i}}
+{e^{\beta_0} e^{-0.5} e^{\beta_2 \textrm{TRT}_i} e^{\beta_3
+\textrm{ALCH}_i} e^{\beta_4 \textrm{DRUG}_i}}
 \]</span> <span class="math display">\[
 = \frac{e^0}{e^{-0.5}}
 \]</span> <span class="math display">\[
 = e^{0.5} \approxeq 1.65
 \]</span></p>
 </div>
-<div id="interpretation-of-coefficients-contd" class="section level2">
-<h2 class="hasAnchor">
-<a href="#interpretation-of-coefficients-contd" class="anchor"></a>Interpretation of coefficients (cont’d)</h2>
+<div class="section level3">
+<h3 id="interpretation-of-coefficients-contd">Interpretation of coefficients (cont’d)<a class="anchor" aria-label="anchor" href="#interpretation-of-coefficients-contd"></a>
+</h3>
 <ul>
-<li>If <span class="math inline">\(\hat \beta_1=-0.5\)</span> with whites as the reference group:
+<li>If <span class="math inline">\(\hat \beta_1=-0.5\)</span> with
+whites as the reference group:
 <ul>
-<li>after adjustment for treatment group, alcohol and drug usage, whites tend to use the emergency room at a rate 1.65 times higher than non-whites.</li>
-<li>equivalently, the average rate of usage for whites is 65% higher than that for non-whites</li>
+<li>after adjustment for treatment group, alcohol and drug usage, whites
+tend to use the emergency room at a rate 1.65 times higher than
+non-whites.</li>
+<li>equivalently, the average rate of usage for whites is 65% higher
+than that for non-whites</li>
 </ul>
 </li>
-<li>Multiplicative rules apply for other coefficients as well, because they are exponentiated to estimate the mean rate.</li>
+<li>Multiplicative rules apply for other coefficients as well, because
+they are exponentiated to estimate the mean rate.</li>
 </ul>
 </div>
 </div>
-<div id="multi-collinearity" class="section level1">
-<h1 class="hasAnchor">
-<a href="#multi-collinearity" class="anchor"></a>Multi-collinearity</h1>
-<div id="what-is-multicollinearity" class="section level2">
-<h2 class="hasAnchor">
-<a href="#what-is-multicollinearity" class="anchor"></a>What is Multicollinearity?</h2>
+<div class="section level2">
+<h2 id="multi-collinearity">Multi-collinearity<a class="anchor" aria-label="anchor" href="#multi-collinearity"></a>
+</h2>
+<div class="section level3">
+<h3 id="what-is-multicollinearity">What is Multicollinearity?<a class="anchor" aria-label="anchor" href="#what-is-multicollinearity"></a>
+</h3>
 <ol style="list-style-type: decimal">
 <li>
-<em>Multicollinearity</em> exists when two or more of the independent variables in regression are moderately or highly correlated.</li>
-<li>High correlation among continuous predictors or high concordance among categorical predictors</li>
+<em>Multicollinearity</em> exists when two or more of the
+independent variables in regression are moderately or highly
+correlated.</li>
+<li>High correlation among continuous predictors or high concordance
+among categorical predictors</li>
 <li>Impacts the ability to estimate regression coefficients
 <ul>
 <li>larger standard errors for regression coefficients</li>
 <li>ie, coefficients are unstable over repeated sampling</li>
-<li>exact collinearity produces infinite standard errors on coefficients</li>
+<li>exact collinearity produces infinite standard errors on
+coefficients</li>
 </ul>
 </li>
 <li>Can also result in unstable (high variance) prediction models</li>
 </ol>
 </div>
-<div id="identifying-multicollinearity" class="section level2">
-<h2 class="hasAnchor">
-<a href="#identifying-multicollinearity" class="anchor"></a>Identifying multicollinearity</h2>
+<div class="section level3">
+<h3 id="identifying-multicollinearity">Identifying multicollinearity<a class="anchor" aria-label="anchor" href="#identifying-multicollinearity"></a>
+</h3>
 <ol style="list-style-type: decimal">
-<li>Pairwise correlations of data or of model matrix (latter works with categorical variables)</li>
+<li>Pairwise correlations of data or of model matrix (latter works with
+categorical variables)</li>
 <li>Heat maps</li>
 <li>Variance Inflation Factor (VIF) of regression coefficients</li>
 </ol>
 </div>
-<div id="example-us-judge-ratings-dataset" class="section level2">
-<h2 class="hasAnchor">
-<a href="#example-us-judge-ratings-dataset" class="anchor"></a>Example: US Judge Ratings dataset</h2>
-<p>See <code><a href="https://rdrr.io/r/datasets/USJudgeRatings.html">?USJudgeRatings</a></code> for dataset, <code><a href="https://rdrr.io/r/graphics/pairs.html">?pairs</a></code> for plot code: <img src="session_lecture_files/figure-html/unnamed-chunk-2-1.png" width="700"> **Pairwise scatterplot of continuous variables in US Judge Ratings dataset</p>
+<div class="section level3">
+<h3 id="example-us-judge-ratings-dataset">Example: US Judge Ratings dataset<a class="anchor" aria-label="anchor" href="#example-us-judge-ratings-dataset"></a>
+</h3>
+<p>See <code><a href="https://rdrr.io/r/datasets/USJudgeRatings.html" class="external-link">?USJudgeRatings</a></code> for dataset, <code><a href="https://rdrr.io/r/graphics/pairs.html" class="external-link">?pairs</a></code> for
+plot code:</p>
+<pre><code><span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span>
+<span></span>
+<span><span class="co">## Warning in par(usr): argument 1 does not name a graphical parameter</span></span></code></pre>
+<p><img src="session_lecture_files/figure-html/unnamed-chunk-2-1.png" width="700">
+**Pairwise scatterplot of continuous variables in US Judge Ratings
+dataset</p>
 </div>
-<div id="example-iris-dataset" class="section level2">
-<h2 class="hasAnchor">
-<a href="#example-iris-dataset" class="anchor"></a>Example: iris dataset</h2>
-<p>One categorical variable, so use model matrix. Make a simple heatmap. </p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="va">mm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.matrix.html">model.matrix</a></span><span class="op">(</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
-<span class="fu">pheatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pheatmap/man/pheatmap.html">pheatmap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">mm</span><span class="op">[</span>, <span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>, <span class="co">#-1 gets rid of intercept column</span>
-  color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/colorRamp.html">colorRampPalette</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"#f0f0f0"</span>, <span class="st">"#bdbdbd"</span>, <span class="st">"#636363"</span><span class="op">)</span><span class="op">)</span><span class="op">(</span><span class="fl">100</span><span class="op">)</span><span class="op">)</span></pre></div>
-<p><img src="session_lecture_files/figure-html/unnamed-chunk-3-1.png" width="700"><em>Note:</em> multicollinearity exists between multiple predictors, not between predictor and outcome</p>
+<div class="section level3">
+<h3 id="example-iris-dataset">Example: iris dataset<a class="anchor" aria-label="anchor" href="#example-iris-dataset"></a>
+</h3>
+<p>One categorical variable, so use model matrix. Make a simple heatmap.
+</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix</a></span><span class="op">(</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
+<span><span class="fu">pheatmap</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pheatmap/man/pheatmap.html" class="external-link">pheatmap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">mm</span><span class="op">[</span>, <span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>, <span class="co">#-1 gets rid of intercept column</span></span>
+<span>  color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/colorRamp.html" class="external-link">colorRampPalette</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#f0f0f0"</span>, <span class="st">"#bdbdbd"</span>, <span class="st">"#636363"</span><span class="op">)</span><span class="op">)</span><span class="op">(</span><span class="fl">100</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="session_lecture_files/figure-html/unnamed-chunk-3-1.png" width="700"><em>Note:</em> multicollinearity exists between multiple predictors, not
+between predictor and outcome</p>
 </div>
-<div id="example-iris-dataset-1" class="section level2">
-<h2 class="hasAnchor">
-<a href="#example-iris-dataset-1" class="anchor"></a>Example: iris dataset</h2>
-<p>Confirm what in iris dataset using Variance Inflation Factor of a linear regression model: </p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
-<span class="fu">car</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/car/man/vif.html">vif</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></pre></div>
-<pre><code>##                   GVIF Df GVIF^(1/(2*Df))
-## Sepal.Length  6.124653  1        2.474804
-## Petal.Length 45.132550  1        6.718076
-## Petal.Width  18.373804  1        4.286468
-## Species      32.701564  2        2.391344</code></pre>
+<div class="section level3">
+<h3 id="example-iris-dataset-1">Example: iris dataset<a class="anchor" aria-label="anchor" href="#example-iris-dataset-1"></a>
+</h3>
+<p>Confirm what in iris dataset using Variance Inflation Factor of a
+linear regression model: </p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
+<span><span class="fu">car</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/car/man/vif.html" class="external-link">vif</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##                   GVIF Df GVIF^(1/(2*Df))</span></span>
+<span><span class="co">## Sepal.Length  6.124653  1        2.474804</span></span>
+<span><span class="co">## Petal.Length 45.132550  1        6.718076</span></span>
+<span><span class="co">## Petal.Width  18.373804  1        4.286468</span></span>
+<span><span class="co">## Species      32.701564  2        2.391344</span></span></code></pre>
 </div>
-<div id="approaches-for-dealing-with-multicollinearity" class="section level2">
-<h2 class="hasAnchor">
-<a href="#approaches-for-dealing-with-multicollinearity" class="anchor"></a>Approaches for dealing with multicollinearity</h2>
+<div class="section level3">
+<h3 id="approaches-for-dealing-with-multicollinearity">Approaches for dealing with multicollinearity<a class="anchor" aria-label="anchor" href="#approaches-for-dealing-with-multicollinearity"></a>
+</h3>
 <p>Options:</p>
 <ol style="list-style-type: decimal">
 <li>Select a representative variable</li>
 <li>Average variables</li>
 <li>Principal Component Analysis or other dimension reducuction</li>
-<li>For prediction modeling, special methods like penalized regression, Support Vector Machines, …</li>
+<li>For prediction modeling, special methods like penalized regression,
+Support Vector Machines, …</li>
 </ol>
 </div>
 </div>
-<div id="conclusions" class="section level1">
-<h1 class="hasAnchor">
-<a href="#conclusions" class="anchor"></a>Conclusions</h1>
-<div id="conclusions-1" class="section level2">
-<h2 class="hasAnchor">
-<a href="#conclusions-1" class="anchor"></a>Conclusions</h2>
+<div class="section level2">
+<h2 id="conclusions">Conclusions<a class="anchor" aria-label="anchor" href="#conclusions"></a>
+</h2>
+<div class="section level3">
+<h3 id="conclusions-1">Conclusions<a class="anchor" aria-label="anchor" href="#conclusions-1"></a>
+</h3>
 <ol style="list-style-type: decimal">
-<li>Log-linear models are appropriate for non-negative, skewed count data
+<li>Log-linear models are appropriate for non-negative, skewed count
+data
 <ul>
 <li>probability of each event is low</li>
 </ul>
 </li>
-<li>The coefficients of log-linear models are <em>multiplicative</em>
+<li>The coefficients of log-linear models are
+<em>multiplicative</em>
 </li>
-<li>An <em>offset</em> term can account for varying follow-up time or otherwise varying opportunity to be counted</li>
-<li>Poisson distribution is limit of binomial distribution with high number of trials, low probability</li>
-<li>Inference from log-linear models is sensitive to the choice of error model (assumption on the distribution of residuals)</li>
-<li>We will cover other options next week for when the Poisson error model doesn’t fit:
+<li>An <em>offset</em> term can account for varying follow-up time or
+otherwise varying opportunity to be counted</li>
+<li>Poisson distribution is limit of binomial distribution with high
+number of trials, low probability</li>
+<li>Inference from log-linear models is sensitive to the choice of error
+model (assumption on the distribution of residuals)</li>
+<li>We will cover other options next week for when the Poisson error
+model doesn’t fit:
 <ul>
 <li>Variance proportional to mean, instead of equal</li>
 <li>Negative Binomial</li>
@@ -478,11 +694,13 @@ log(\lambda_i) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + \b
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://waldronlab.io">Levi Waldron</a>.</p>
+  <p></p>
+<p>Developed by <a href="https://waldronlab.io" class="external-link">Levi Waldron</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
@@ -490,6 +708,8 @@ log(\lambda_i) = \beta_0 + \beta_1 \textrm{RACE}_i + \beta_2 \textrm{TRT}_i + \b
 
   
 
+
+  
 
   </body>
 </html>
