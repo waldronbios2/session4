@@ -68,7 +68,7 @@ So we reject $H_0$
 BEWARE OF MISSING DATA: THIS IS SAFER
 
 ```{r}
-fit0 <- glm(y ~ -1, data = simdat, family = poisson(link = "log"))
+fit0 <- glm(y ~ 1, data = simdat, family = poisson(link = "log"))
 anova(fit0, fit, test = "LRT")
 ```
 
